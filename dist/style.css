@@ -43,6 +43,7 @@ body {
   width: 30px;
   cursor: pointer;
 }
+
 .hamburger {
   height: 5px;
   background-color: #fff;
@@ -93,9 +94,119 @@ input:checked ~ .hamburger::after {
   width: 30px;
 }
 
+.sidebar {
+  position: absolute;
+  left: -100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 92vh;
+  width: 100vw;
+  padding-bottom: 4rem;
+  background-color: #fff;
+  transition: 0.3s;
+}
+
+.sidebar-active {
+  left: 0;
+}
+
+.deafult-project-list,
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.button-deafult-project,
+.button-project,
+.button-project-add {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 2rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button-deafult-project img,
+.button-project img,
+.button-project-add img {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.6rem;
+  margin-left: 0.6rem;
+}
+
+.projects-list-information {
+  align-self: flex-start;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+.popup-project-add {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "input input"
+    "add cancel";
+  grid-gap: 10px;
+  width: 85%;
+  height: 4rem;
+  margin-top: 2rem;
+}
+
+.popup-project-input,
+.popup-button-cancel,
+.popup-button-cancel {
+  font-family: "Poppins", sans-serif;
+}
+
+.popup-project-input {
+  grid-area: input;
+  padding-left: 0.8rem;
+  font-weight: 700;
+}
+
+.popup-button-add,
+.popup-button-cancel {
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.popup-button-add {
+  grid-area: add;
+  background-color: #003459;
+}
+
+.popup-button-cancel {
+  grid-area: cancel;
+  background-color: #7f1d1d;
+}
+
+.active {
+  background-color: #cccccc;
+}
+
+.hide {
+  display: none;
+}
+
 @media screen and (orientation: landscape) {
   .hamburger,
   .toggle-menu {
     display: none;
+  }
+
+  .sidebar {
+    left: 0;
+    width: 30vw;
   }
 }
