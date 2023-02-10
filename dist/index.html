@@ -8,7 +8,79 @@
     <title>Todo-list</title>
   </head>
   <body>
-    <div>dasddsasdasdasdasdasdasdasdasdasd</div>
+    <header class="header">
+      <input type="checkbox" class="toggle-menu" />
+      <div class="hamburger"></div>
+
+      <h1><img src="" aria-label="none" />Todo List</h1>
+    </header>
+
+    <main>
+      <div class="sidebar" id="sidebar">
+        <div class="deafult-project-list">
+          <button class="button-deafult-project">Inbox</button>
+          <button class="button-deafult-project">Today</button>
+          <button class="button-deafult-project">This week</button>
+        </div>
+
+        <div class="projects-list">
+          <p class="projects-list-information">Projects</p>
+          <button class="button-project">Create To Do App</button>
+          <button class="button-project">Make a video</button>
+          <button class="button-project">Make dinner</button>
+        </div>
+
+        <button class="button-project-add">Add Project</button>
+
+        <div class="popup-project-add">
+          <input class="popup-project-input" type="text" name="project" id="project" />
+          <button class="popup-button-add">Add</button>
+          <button class="popup-button-cancel">Cancel</button>
+        </div>
+      </div>
+
+      <section class="tasks">
+        <div class="tasks-informations">
+          <p><img src="" aria-label="none" /> <span>Create To Do App</span></p>
+          <p><span>1</span> task remaning</p>
+        </div>
+
+        <div class="tasks-to-do">
+          <div class="task"></div>
+          <div class="task"></div>
+        </div>
+
+        <div class="tasks-events">
+          <button class="button-task-add">+</button>
+          <button class="button-task-clear">Clear completed tasks</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="popup-task-action">
+      <p>New Task</p>
+      <button class="popup-task-event-cancel"></button>
+      <form action="#" class="popup-task-form">
+        <label for="task-name">Task name:</label>
+        <input type="text" id="task-name" name="task-name" />
+
+        <label for="date">Due date</label>
+        <input type="date" id="date" />
+
+        <label for="priority">Priority:</label>
+        <select name="priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" cols="30" rows="10"></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
     <script src="main.js"></script>
   </body>
 </html>
