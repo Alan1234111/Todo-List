@@ -11,6 +11,8 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+/* header */
+
 .header {
   position: relative;
   display: flex;
@@ -41,7 +43,6 @@ body {
   left: 3%;
   transform: translateY(-50%);
   width: 30px;
-  cursor: pointer;
 }
 
 .hamburger {
@@ -94,6 +95,12 @@ input:checked ~ .hamburger::after {
   width: 30px;
 }
 
+/* Sidebar */
+
+main {
+  width: 100vw;
+}
+
 .sidebar {
   position: absolute;
   left: -100%;
@@ -131,7 +138,6 @@ input:checked ~ .hamburger::after {
   border: none;
   background-color: transparent;
   font-weight: 700;
-  cursor: pointer;
 }
 
 .button-deafult-project img,
@@ -178,7 +184,6 @@ input:checked ~ .hamburger::after {
 .popup-button-cancel {
   color: white;
   border: none;
-  cursor: pointer;
 }
 
 .popup-button-add {
@@ -191,12 +196,185 @@ input:checked ~ .hamburger::after {
   background-color: #7f1d1d;
 }
 
+/* task */
+
+.project {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 92vh;
+}
+
+.project-informations {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem 1rem;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.project-selected-name {
+  display: flex;
+  align-items: center;
+}
+
+.project-selected-name img {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.7rem;
+}
+
 .active {
   background-color: #cccccc;
 }
 
 .hide {
   display: none;
+}
+
+.task-to-do {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.task {
+  display: grid;
+  grid-template-areas: "checkbox name date edit delete ";
+  grid-template-columns: 1fr 4fr 2fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: center;
+  width: 90%;
+  min-height: 4rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  font-size: 0.8rem;
+  background-color: white;
+}
+
+.task-checkbox {
+  grid-area: checkbox;
+  display: none;
+}
+
+.task-checkbox + label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-checkbox + label:before {
+  display: inline-block;
+}
+
+.task-checkbox + label:before {
+  content: url("img/checkbox-blank.svg");
+  width: 20px;
+  height: 20px;
+}
+
+.task-checkbox:checked + label:before {
+  content: url("img/checkbox-marked.svg");
+}
+
+.task-checkbox.low-priority + label::before {
+  filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg) brightness(101%) contrast(88%);
+}
+
+.task-checkbox.medium-priority + label::before {
+  filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg) brightness(87%) contrast(89%);
+}
+
+.task-checkbox.high-priority + label::before {
+  filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg) brightness(91%) contrast(105%);
+}
+
+.task-name {
+  grid-area: name;
+  font-size: 0.8rem;
+  user-select: none;
+}
+
+.task-date {
+  grid-area: date;
+  font-size: 0.8rem;
+  user-select: none;
+}
+
+.button-edit {
+  grid-area: edit;
+}
+
+.button-delete {
+  grid-area: delete;
+}
+
+.button-edit,
+.button-delete {
+  border: none;
+  background-color: transparent;
+}
+
+.button-edit img,
+.button-delete img {
+  width: 25px;
+  height: 25px;
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
+}
+
+.task-events {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  margin: auto auto 2rem;
+}
+
+.button-task-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid #007fff;
+  background-color: transparent;
+}
+
+.button-task-add img {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+  width: 70%;
+  height: 70%;
+}
+
+.button-task-add.active {
+  background-color: #007fff;
+}
+
+.button-task-add.active img {
+  transform: rotate(45deg);
+}
+
+.button-task-clear {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 60%;
+  padding: 0 0.7rem;
+  border-radius: 16px;
+  border: none;
+  background-color: #fff;
+  color: #007fff;
+}
+
+.button-task-clear img {
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
+  border: 1px solid #007fff;
+  border-radius: 50%;
 }
 
 @media screen and (orientation: landscape) {
@@ -208,5 +386,88 @@ input:checked ~ .hamburger::after {
   .sidebar {
     left: 0;
     width: 30vw;
+  }
+
+  .project {
+    position: absolute;
+    right: 0;
+    width: 70vw;
+    align-self: flex-end;
+  }
+
+  .task {
+    grid-template-columns: 1fr 12fr 2fr 1fr 1fr;
+  }
+
+  .project-informations {
+    padding: 2rem 3.5rem 1.5rem;
+  }
+
+  .task-events {
+    margin: 2rem auto 0;
+  }
+
+  .task-checkbox + label {
+    cursor: pointer;
+  }
+
+  .button-task-add {
+    cursor: pointer;
+  }
+
+  .button-deafult-project,
+  .button-project,
+  .button-project-add {
+    cursor: pointer;
+  }
+
+  .popup-button-add,
+  .popup-button-cancel {
+    cursor: pointer;
+  }
+
+  .button-edit,
+  .button-delete {
+    cursor: pointer;
+    transition: 0.1s all ease-in;
+  }
+
+  .button-edit:hover,
+  .button-delete:hover {
+    transform: scale(1.1);
+  }
+
+  .button-task-add {
+    transition: 0.2s;
+  }
+
+  .button-task-add img {
+    transition: 0.2s;
+  }
+
+  .button-task-add:hover {
+    background-color: #007fff;
+  }
+
+  .button-task-add:hover img {
+    transform: rotate(45deg);
+  }
+
+  .button-task-clear {
+    justify-content: space-around;
+    width: 30%;
+    padding: 0.4rem 0.4rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .button-task-clear:hover {
+    background-color: #007fff;
+    color: white;
+  }
+
+  .button-task-clear:hover img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+    border-color: black;
   }
 }
