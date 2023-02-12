@@ -377,6 +377,73 @@ main {
   border-radius: 50%;
 }
 
+/* popup */
+
+.popup-task-action {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  z-index: 1;
+  height: 70%;
+  width: 90%;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.popup-name-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15%;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #007fff;
+}
+
+.popup-task-event-cancel {
+  position: absolute;
+  top: 8%;
+  right: 4%;
+  width: 35px;
+  height: 35px;
+  border: none;
+  transform: rotate(45deg);
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
+  background-color: transparent;
+}
+
+.popup-task-form {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.popup-input-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-top: 0.5rem;
+  border: none;
+  background-color: #eeeeee;
+}
+
+.popup-button-submit {
+  margin-top: 2rem;
+  height: 3rem;
+  color: #003459;
+  background-color: #fff;
+  border: 1px solid #003459;
+}
+
 @media screen and (orientation: landscape) {
   .hamburger,
   .toggle-menu {
@@ -455,8 +522,8 @@ main {
 
   .button-task-clear {
     justify-content: space-around;
-    width: 30%;
-    padding: 0.4rem 0.4rem;
+    width: 25%;
+    padding: 0.4rem 1.5%;
     cursor: pointer;
     transition: 0.2s;
   }
@@ -469,5 +536,44 @@ main {
   .button-task-clear:hover img {
     filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
     border-color: black;
+  }
+
+  /* popup */
+
+  .popup-task-action {
+    height: max(60vh, 550px);
+    width: min(25vw, 400px);
+  }
+
+  .popup-name-action {
+    font-size: 1.8rem;
+  }
+
+  .popup-task-event-cancel {
+    top: 3%;
+    right: 2%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+  }
+
+  .popup-input-container {
+    margin-top: 2rem;
+  }
+
+  .popup-input {
+    padding: 1rem 1rem;
+  }
+
+  .popup-button-submit {
+    margin-top: 3rem;
+    height: 4rem;
+    font-weight: 700;
+    transition: 0.2s;
+  }
+
+  .popup-button-submit:hover {
+    background-color: #003459;
+    color: white;
   }
 }
