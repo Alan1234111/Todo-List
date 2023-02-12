@@ -112,6 +112,7 @@ main {
   padding-bottom: 4rem;
   background-color: #fff;
   transition: 0.3s;
+  z-index: 2;
 }
 
 .sidebar-active {
