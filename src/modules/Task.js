@@ -1,22 +1,24 @@
 export default class Task {
   tasks = [];
 
+  popupAction = "New Task";
   activeProject = "Create To Do App";
   constructor() {
     this.buttonTaskAdd = document.querySelector(".button-task-add");
+    this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
     this.popupForm = document.querySelector(".popup-task-form");
     this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
-
     this.taskToDo = document.querySelector(".task-to-do");
 
-    this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
-    this.popupForm.addEventListener("submit", this.createNewTask);
+    this.buttonTaskAdd.addEventListener("click", this.newTask);
     this.popupTaskActionCancel.addEventListener("click", this.toggleAddTask);
   }
 
   toggleAddTask = () => {
+    this.popupForm.replaceWith(this.popupForm.cloneNode(true));
     this.popupTaskAction.classList.toggle("hide");
+    this.popupNameActionText.textContent = this.popupAction;
   };
 
   createTaskContainer(taskName, dueDate, priority) {
@@ -43,10 +45,10 @@ export default class Task {
 
     const editBtn = document.createElement("button");
     editBtn.classList.add("button-edit");
+    editBtn.addEventListener("click", this.editTask);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("button-delete");
-
     deleteBtn.addEventListener("click", this.deleteTask);
 
     task.appendChild(checkbox);
@@ -61,6 +63,8 @@ export default class Task {
 
   createNewTask = (e) => {
     e.preventDefault();
+
+    if (!this.popupAction == "New Task") return;
 
     let isAlreadyExist = false;
 
@@ -105,5 +109,45 @@ export default class Task {
 
     this.tasks.splice(taskDeleteIndex, 1);
     e.target.parentNode.remove();
+  };
+
+  newTask = () => {
+    this.popupAction = "New Task";
+    console.log(this.popupForm);
+    this.toggleAddTask();
+    console.log(this.popupForm);
+
+    this.popupForm.addEventListener(
+      "submit",
+      () => {
+        this.createNewTask(event);
+      },
+      {once: true}
+    );
+  };
+
+  editTask = (e) => {
+    this.popupAction = "Edit Task";
+    this.toggleAddTask();
+
+    const taskName = e.target.parentNode.querySelector(".task-name");
+    const dueDate = e.target.parentNode.querySelector(".task-date");
+    const priority = e.target.parentNode.querySelector(".task-checkbox");
+
+    this.popupForm.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
+        const editedTaskName = document.getElementById("task-name").value;
+        const editedDueDate = document.getElementById("date").value;
+        const editedPriority = document.getElementById("priority").value;
+
+        taskName.textContent = editedTaskName;
+        dueDate.textContent = editedDueDate;
+        priority.classList.add(editedPriority);
+        this.toggleAddTask();
+      },
+      {once: true}
+    );
   };
 }
