@@ -42,18 +42,12 @@ export default class Task {
     date.textContent = `${dueDate}`;
 
     const editBtn = document.createElement("button");
-    const editBtnImg = document.createElement("img");
     editBtn.classList.add("button-edit");
-    editBtnImg.src = "img/edit-task.svg";
-    editBtnImg.alt = "change task";
-    editBtn.appendChild(editBtnImg);
 
     const deleteBtn = document.createElement("button");
-    const deleteBtnImg = document.createElement("img");
     deleteBtn.classList.add("button-delete");
-    deleteBtnImg.src = "img/delete.svg";
-    deleteBtnImg.alt = "delete";
-    deleteBtn.appendChild(deleteBtnImg);
+
+    deleteBtn.addEventListener("click", this.deleteTask);
 
     task.appendChild(checkbox);
     task.appendChild(label);
@@ -104,4 +98,12 @@ export default class Task {
 
     activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority));
   }
+
+  deleteTask = (e) => {
+    const taskName = e.target.parentNode.querySelector(".task-name").textContent;
+    const taskDeleteIndex = this.tasks.findIndex((task) => task.name == taskName);
+
+    this.tasks.splice(taskDeleteIndex, 1);
+    e.target.parentNode.remove();
+  };
 }
