@@ -306,23 +306,23 @@ main {
 
 .button-edit {
   grid-area: edit;
+  background-image: url("img/edit-task.svg");
 }
 
 .button-delete {
   grid-area: delete;
+  background-image: url("img/delete.svg");
 }
 
 .button-edit,
 .button-delete {
-  border: none;
-  background-color: transparent;
-}
-
-.button-edit img,
-.button-delete img {
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
   width: 25px;
   height: 25px;
-  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
+  border: none;
+  background-color: transparent;
 }
 
 .task-events {
