@@ -280,15 +280,15 @@ main {
   content: url("img/checkbox-marked.svg");
 }
 
-.task-checkbox.low-priority + label::before {
+.task-checkbox.low + label::before {
   filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg) brightness(101%) contrast(88%);
 }
 
-.task-checkbox.medium-priority + label::before {
+.task-checkbox.medium + label::before {
   filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg) brightness(87%) contrast(89%);
 }
 
-.task-checkbox.high-priority + label::before {
+.task-checkbox.high + label::before {
   filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg) brightness(91%) contrast(105%);
 }
 
