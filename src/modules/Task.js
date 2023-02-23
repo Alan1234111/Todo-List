@@ -1,24 +1,43 @@
 export default class Task {
   tasks = [];
-
   popupAction = "New Task";
   activeProject = "Create To Do App";
+
   constructor() {
     this.buttonTaskAdd = document.querySelector(".button-task-add");
+    this.buttonTaskClear = document.querySelector(".button-task-clear");
+
     this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
-    this.popupForm = document.querySelector(".popup-task-form");
     this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
     this.taskToDo = document.querySelector(".task-to-do");
+    this.popupForm = document.querySelector(".popup-task-form");
+    this.projectTaskQuantity = document.querySelector(".project-task-quantity");
 
-    this.buttonTaskAdd.addEventListener("click", this.newTask);
-    this.popupTaskActionCancel.addEventListener("click", this.toggleAddTask);
+    this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
+    this.buttonTaskClear.addEventListener("click", this.clearCompletedTask);
+    this.popupTaskActionCancel.addEventListener("click", this.removeFormListeners);
   }
 
-  toggleAddTask = () => {
-    this.popupForm.replaceWith(this.popupForm.cloneNode(true));
+  togglePopupForm() {
     this.popupTaskAction.classList.toggle("hide");
-    this.popupNameActionText.textContent = this.popupAction;
+  }
+
+  removeFormListeners = () => {
+    this.popupForm.removeEventListener("submit", this.createNewTask);
+    this.togglePopupForm();
+  };
+
+  toggleEditTask = () => {
+    this.togglePopupForm();
+    this.popupNameActionText.textContent = "Edit Task";
+  };
+
+  toggleAddTask = () => {
+    this.togglePopupForm();
+    this.popupNameActionText.textContent = "New Task";
+
+    this.popupForm.addEventListener("submit", this.createNewTask);
   };
 
   createTaskContainer(taskName, dueDate, priority) {
@@ -26,6 +45,7 @@ export default class Task {
     task.classList.add("task");
 
     const checkbox = document.createElement("input");
+    checkbox.addEventListener("click", this.renderTasksRemaininig);
     checkbox.classList.add("task-checkbox");
     checkbox.classList.add(`${priority}`);
     checkbox.type = "checkbox";
@@ -61,10 +81,20 @@ export default class Task {
     this.taskToDo.append(task);
   }
 
+  addTaskToArray(activeProject, taskName, dueDate, priority) {
+    const task = {
+      projectName: activeProject,
+      name: taskName,
+      dueDate: dueDate,
+      priority: priority,
+    };
+
+    this.tasks.push(task);
+  }
+
   createNewTask = (e) => {
     e.preventDefault();
-
-    if (!this.popupAction == "New Task") return;
+    this.popupForm.removeEventListener("submit", this.createNewTask);
 
     let isAlreadyExist = false;
 
@@ -78,20 +108,84 @@ export default class Task {
 
     if (isAlreadyExist) return;
 
-    const task = {
-      projectName: this.activeProject,
-      name: taskName,
-      dueDate: dueDate,
-      priority: priority,
-    };
-
-    this.tasks.push(task);
+    this.addTaskToArray(this.activeProject, taskName, dueDate, priority);
     this.createTaskContainer(taskName, dueDate, priority);
-    this.toggleAddTask();
+    this.togglePopupForm();
+    this.renderTasksRemaininig();
   };
+
+  renderAllTasks() {
+    let allTasks = [];
+
+    this.tasks.forEach((task) => {
+      allTasks.push(task);
+    });
+
+    allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority));
+  }
+
+  renderAllTodaysTasks() {
+    let todayTasks = [];
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
+    day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
+
+    let fullDate = `${year}-${month}-${day}`;
+
+    this.tasks.forEach((task) => {
+      if (task.dueDate == fullDate) {
+        todayTasks.push(task);
+      }
+    });
+
+    todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority));
+  }
+
+  renderAllWeeksTasks() {
+    // let thisWeeksTasks = [];
+    // const date = new Date();
+    // let day = date.getDate() + 10;
+    // let month = date.getMonth() + 1;
+    // let year = date.getFullYear();
+    // function getWeekNumber(d) {
+    //   // Copy date so don't modify original
+    //   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    //   // Set to nearest Thursday: current date + 4 - current day number
+    //   // Make Sunday's day number 7
+    //   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    //   // Get first day of year
+    //   var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    //   // Calculate full weeks to nearest Thursday
+    //   var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    //   // Return array of year and week number
+    //   return [d.getUTCFullYear(), weekNo];
+    // }
+    // var result = getWeekNumber(new Date());
+    // console.log(result);
+    // month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
+    // // day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
+    // let fullDate = `${year}-${month}-${day}`;
+    // console.log(fullDate);
+    // this.tasks.forEach((task) => {
+    //   if (task.dueDate == fullDate) {
+    //     thisWeeksTasks.push(task);
+    //   }
+    // });
+    // thisWeeksTasks.forEach((thisWeeksTask) => this.createTaskContainer(thisWeeksTask.name, thisWeeksTask.dueDate, thisWeeksTask.priority));
+  }
 
   renderTasks() {
     this.taskToDo.innerHTML = "";
+
+    if (this.activeProject.toLocaleLowerCase() == "inbox") return this.renderAllTasks();
+    if (this.activeProject.toLocaleLowerCase() == "today") return this.renderAllTodaysTasks();
+    // if (this.activeProject.toLocaleLowerCase() == "this week") return this.renderAllWeeksTasks();
+
     let activeProjectTask = [];
 
     this.tasks.forEach((task) => {
@@ -101,6 +195,7 @@ export default class Task {
     });
 
     activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority));
+    this.renderTasksRemaininig();
   }
 
   deleteTask = (e) => {
@@ -111,43 +206,40 @@ export default class Task {
     e.target.parentNode.remove();
   };
 
-  newTask = () => {
-    this.popupAction = "New Task";
-    console.log(this.popupForm);
-    this.toggleAddTask();
-    console.log(this.popupForm);
-
-    this.popupForm.addEventListener(
-      "submit",
-      () => {
-        this.createNewTask(event);
-      },
-      {once: true}
-    );
-  };
-
   editTask = (e) => {
-    this.popupAction = "Edit Task";
-    this.toggleAddTask();
+    this.toggleEditTask();
 
     const taskName = e.target.parentNode.querySelector(".task-name");
     const dueDate = e.target.parentNode.querySelector(".task-date");
     const priority = e.target.parentNode.querySelector(".task-checkbox");
 
-    this.popupForm.addEventListener(
-      "submit",
-      (event) => {
-        event.preventDefault();
-        const editedTaskName = document.getElementById("task-name").value;
-        const editedDueDate = document.getElementById("date").value;
-        const editedPriority = document.getElementById("priority").value;
+    this.popupForm.addEventListener("submit", this.changeTaskProperty, { once: true });
+  };
 
-        taskName.textContent = editedTaskName;
-        dueDate.textContent = editedDueDate;
-        priority.classList.add(editedPriority);
-        this.toggleAddTask();
-      },
-      {once: true}
-    );
+  renderTasksRemaininig = () => {
+    const numberOfTasks = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:not(:checked)`).length;
+    this.projectTaskQuantity.textContent = numberOfTasks;
+  };
+
+  clearCompletedTask = () => {
+    let completeTasks = [];
+
+    const completedTasksCheckboxes = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:checked`);
+    completedTasksCheckboxes.forEach((completeTaskcheckbox) => completeTasks.push(completeTaskcheckbox.closest(".task")));
+
+    completeTasks.forEach((completeTask) => {
+      const taskName = completeTask.querySelector(".task-name").textContent;
+      const taskDeleteIndex = this.tasks.findIndex((task) => task.name == taskName);
+      this.tasks.splice(taskDeleteIndex, 1);
+      completeTask.remove();
+    });
   };
 }
+
+// const editedTaskName = document.getElementById("task-name").value;
+// const editedDueDate = document.getElementById("date").value;
+// const editedPriority = document.getElementById("priority").value;
+
+// taskName.textContent = editedTaskName;
+// dueDate.textContent = editedDueDate;
+// priority.classList.add(editedPriority);
