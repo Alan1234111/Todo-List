@@ -9,6 +9,7 @@ export default class Projects {
     this.projectSectionInput = document.querySelector(".popup-project-input");
     this.projectSectionAddBtn = document.querySelector(".popup-button-add");
     this.projectSectionCancelBtn = document.querySelector(".popup-button-cancel");
+    this.projectName = document.querySelector(".project-name");
 
     this.userProjectsList = document.querySelector(".projects-list");
     this.btnsDeafultsProjects = document.querySelectorAll(".button-deafult-project");
@@ -44,9 +45,10 @@ export default class Projects {
 
   changeProject = (e) => {
     this.btnsUserProjects = document.querySelectorAll(".button-project");
-    this.btnsDeafultsProjects.forEach((btn) => btn.classList.remove("active"));
     this.btnsUserProjects.forEach((btn) => btn.classList.remove("active"));
+    this.btnsDeafultsProjects.forEach((btn) => btn.classList.remove("active"));
     e.target.classList.add("active");
+    this.projectName.textContent = e.target.textContent;
 
     this.task.activeProject = e.target.textContent;
     this.task.renderTasks();
