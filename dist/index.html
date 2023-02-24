@@ -7,7 +7,10 @@
     <link rel="icon" href="img/icon.png" type="image/icon type" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Todo-list</title>
   </head>
@@ -16,42 +19,73 @@
       <input type="checkbox" class="toggle-menu" />
       <div class="hamburger"></div>
 
-      <h1 class="header-name"><img src="img/icon.png" aria-label="none" />Todo List</h1>
+      <h1 class="header-name">
+        <img src="img/icon.png" aria-label="none" />Todo List
+      </h1>
     </header>
 
     <main>
       <div class="sidebar" id="sidebar">
         <div class="deafult-project-list">
-          <button class="button-deafult-project active"><img src="img/inbox.svg" aria-label="none" />Inbox</button>
-          <button class="button-deafult-project"><img src="img/today.svg" aria-label="none" />Today</button>
-          <button class="button-deafult-project"><img src="img/week.svg" aria-label="none" />This week</button>
+          <button class="button-deafult-project active">
+            <img src="img/inbox.svg" aria-label="none" />Inbox
+          </button>
+          <button class="button-deafult-project">
+            <img src="img/today.svg" aria-label="none" />Today
+          </button>
+          <button class="button-deafult-project">
+            <img src="img/week.svg" aria-label="none" />This week
+          </button>
         </div>
 
         <div class="projects-list">
           <p class="projects-list-information">Projects</p>
-          <button class="button-project"><img src="img/task-list.svg" aria-label="none" />Create To Do App</button>
-          <button class="button-project"><img src="img/task-list.svg" aria-label="none" />Make a video</button>
-          <button class="button-project"><img src="img/task-list.svg" aria-label="none" />Make dinner</button>
+          <button class="button-project">
+            <img src="img/task-list.svg" aria-label="none" />Create To Do App
+          </button>
+          <button class="button-project">
+            <img src="img/task-list.svg" aria-label="none" />Make a video
+          </button>
+          <button class="button-project">
+            <img src="img/task-list.svg" aria-label="none" />Make dinner
+          </button>
         </div>
 
-        <button class="button-project-add"><img src="img/add.svg" aria-label="none" /> Add Project</button>
+        <button class="button-project-add">
+          <img src="img/add.svg" aria-label="none" /> Add Project
+        </button>
 
         <div class="popup-project-add hide">
-          <input class="popup-project-input" type="text" name="project" id="project" />
+          <input
+            class="popup-project-input"
+            type="text"
+            name="project"
+            id="project"
+          />
           <button class="popup-button-add">Add</button>
           <button class="popup-button-cancel">Cancel</button>
         </div>
+
+        <button class="btn-delete-project">Delete Project</button>
       </div>
 
-      <section class="project">
+      <div class="project">
         <div class="project-informations">
-          <p class="project-selected-name"><img src="img/task-list-white.svg" aria-label="none" /> <span class="project-name">Create To Do App</span></p>
+          <p class="project-selected-name">
+            <img src="img/task-list-white.svg" aria-label="none" />
+            <span class="project-name">Create To Do App</span>
+          </p>
           <p><span class="project-task-quantity">1</span> task remaning</p>
         </div>
 
         <div class="task-to-do">
           <div class="task">
-            <input class="task-checkbox low" type="checkbox" name="checkbox-task" id="one" />
+            <input
+              class="task-checkbox low"
+              type="checkbox"
+              name="checkbox-task"
+              id="one"
+            />
             <label for="one"></label>
             <p class="task-name">Create Html</p>
             <p class="task-date">12/07/2023</p>
@@ -60,7 +94,12 @@
           </div>
 
           <div class="task">
-            <input class="task-checkbox medium" type="checkbox" name="checkbox-task" id="two" />
+            <input
+              class="task-checkbox medium"
+              type="checkbox"
+              name="checkbox-task"
+              id="two"
+            />
             <label for="two"></label>
             <p class="task-name">Create CSS</p>
             <p class="task-date">12/07/2023</p>
@@ -69,7 +108,12 @@
           </div>
 
           <div class="task">
-            <input class="task-checkbox high" type="checkbox" name="checkbox-task" id="three" />
+            <input
+              class="task-checkbox high"
+              type="checkbox"
+              name="checkbox-task"
+              id="three"
+            />
             <label for="three"></label>
             <p class="task-name">Create javascript</p>
             <p class="task-date">12/07/2023</p>
@@ -79,22 +123,35 @@
         </div>
 
         <div class="task-events">
-          <button class="button-task-add"><img src="img/add.svg" aria-label="none" /></button>
-          <button class="button-task-clear">Clear completed tasks <img src="img/add.svg" aria-label="none" /></button>
+          <button class="button-task-add">
+            <img src="img/add.svg" aria-label="none" />
+          </button>
+          <button class="button-task-clear">
+            Clear completed tasks <img src="img/add.svg" aria-label="none" />
+          </button>
         </div>
-      </section>
+      </div>
     </main>
 
     <div class="popup-task-action hide">
       <div class="popup-name-action">
         <p>New Task</p>
-        <button class="popup-task-event-cancel"><img src="img/add.svg" aria-label="none" /></button>
+        <button class="popup-task-event-cancel">
+          <img src="img/add.svg" aria-label="none" />
+        </button>
       </div>
 
       <form action="#" class="popup-task-form" id="popup-task-form">
         <div class="popup-input-container">
           <label for="task-name">Task name:</label>
-          <input class="popup-input" type="text" id="task-name" name="task-name" placeholder="Task name" required />
+          <input
+            class="popup-input"
+            type="text"
+            id="task-name"
+            name="task-name"
+            placeholder="Task name"
+            required
+          />
         </div>
 
         <div class="popup-input-container">
