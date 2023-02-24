@@ -1,11 +1,9 @@
 import Task from "./Task";
 
 export default class Projects {
-  projectList = ["Create To Do App"];
+  projectList = ["Create To Do App", "Make a video", "Make dinner"];
   constructor() {
-    this.task = new Task();
     this.btnAddProject = document.querySelector(".button-project-add");
-
     this.projectAddSection = document.querySelector(".popup-project-add");
     this.projectSectionInput = document.querySelector(".popup-project-input");
     this.projectSectionAddBtn = document.querySelector(".popup-button-add");
@@ -13,7 +11,6 @@ export default class Projects {
       ".popup-button-cancel"
     );
     this.projectDeleteBtn = document.querySelector(".btn-delete-project");
-
     this.projectName = document.querySelector(".project-name");
     this.userProjectsList = document.querySelector(".projects-list");
     this.btnsDeafultsProjects = document.querySelectorAll(
@@ -21,13 +18,13 @@ export default class Projects {
     );
     this.btnsUserProjects = document.querySelectorAll(".button-project");
 
+    // Event Listeners
     this.btnAddProject.addEventListener("click", this.toggleInputProjectAdd);
     this.projectSectionAddBtn.addEventListener("click", this.addProject);
     this.projectSectionCancelBtn.addEventListener(
       "click",
       this.toggleInputProjectAdd
     );
-
     this.btnsDeafultsProjects.forEach((btn) =>
       btn.addEventListener("click", this.changeProject)
     );
@@ -35,6 +32,10 @@ export default class Projects {
       btn.addEventListener("click", this.changeProject)
     );
     this.projectDeleteBtn.addEventListener("click", this.deleteProject);
+
+    this.renderProjects();
+    this.task = new Task();
+    this.projectName.textContent = this.task.activeProject;
   }
 
   createProjectBtn(projectName) {
@@ -86,13 +87,17 @@ export default class Projects {
 
   deleteProject = () => {
     const activeProject = document.querySelector(".button-project.active");
+
+    if (!activeProject) return;
+
     activeProject.remove();
     const projectDeleteIndex = this.projectList.findIndex(
-      (project) => project == activeProject.textContent
+      (project) =>
+        project.toLowerCase().replace(/\s+/g, "") ==
+        activeProject.textContent.toLowerCase().replace(/\s+/g, "")
     );
 
     this.projectList.splice(projectDeleteIndex, 1);
-    console.log(this.projectList);
   };
 
   changeProject = (e) => {
@@ -106,10 +111,11 @@ export default class Projects {
     this.task.renderTasks();
   };
 
-  // renderProjects() {
-  // this.userProjectsList.innerHTML = "";
-  // this.projectList.forEach((project) => this.createProjectBtn(project));
-  // }
+  renderProjects() {
+    this.projectList.forEach((projectName) =>
+      this.userProjectsList.appendChild(this.createProjectBtn(projectName))
+    );
+  }
 
   toggleInputProjectAdd = () => {
     this.projectAddSection.classList.toggle("hide");
