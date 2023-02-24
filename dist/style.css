@@ -257,9 +257,7 @@ main {
   min-height: 4rem;
   margin-top: 0.5rem;
   border-radius: 8px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   font-size: 0.8rem;
   background-color: white;
 }
@@ -290,18 +288,15 @@ main {
 }
 
 .task-checkbox.low + label::before {
-  filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg)
-    brightness(101%) contrast(88%);
+  filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg) brightness(101%) contrast(88%);
 }
 
 .task-checkbox.medium + label::before {
-  filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg)
-    brightness(87%) contrast(89%);
+  filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg) brightness(87%) contrast(89%);
 }
 
 .task-checkbox.high + label::before {
-  filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg)
-    brightness(91%) contrast(105%);
+  filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg) brightness(91%) contrast(105%);
 }
 
 .task-name {
@@ -330,8 +325,7 @@ main {
 .button-delete {
   background-repeat: no-repeat;
   background-size: contain;
-  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg)
-    brightness(97%) contrast(108%);
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
   width: 25px;
   height: 25px;
   border: none;
@@ -357,8 +351,7 @@ main {
 }
 
 .button-task-add img {
-  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg)
-    brightness(102%) contrast(102%);
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
   width: 70%;
   height: 70%;
 }
@@ -387,8 +380,7 @@ main {
   width: 20px;
   height: 20px;
   transform: rotate(45deg);
-  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg)
-    brightness(97%) contrast(108%);
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
   border: 1px solid #007fff;
   border-radius: 50%;
 }
@@ -405,9 +397,7 @@ main {
   height: 70%;
   width: 90%;
   border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .popup-name-action {
@@ -429,8 +419,7 @@ main {
   height: 35px;
   border: none;
   transform: rotate(45deg);
-  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg)
-    brightness(97%) contrast(108%);
+  filter: invert(43%) sepia(71%) saturate(1600%) hue-rotate(191deg) brightness(97%) contrast(108%);
   background-color: transparent;
 }
 
@@ -548,8 +537,7 @@ main {
   }
 
   .button-task-clear:hover img {
-    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg)
-      brightness(102%) contrast(102%);
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
     border-color: black;
   }
 
