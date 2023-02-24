@@ -7,7 +7,6 @@ export default class Task {
       priority: "low",
     },
   ];
-  popupAction = "New Task";
   activeProject = "inbox";
 
   constructor() {
@@ -27,6 +26,7 @@ export default class Task {
     this.popupTaskActionCancel.addEventListener("click", this.togglePopupForm);
 
     this.renderTasks();
+    this.renderTasksRemaininig();
   }
 
   togglePopupForm = () => {
@@ -39,10 +39,16 @@ export default class Task {
     this.popupForm.addEventListener("submit", this.createNewTask, {once: true});
   };
 
-  toggleEditTask = () => {
+  toggleEditTask = (e) => {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "Edit Task";
-    this.popupForm.addEventListener("submit", this.editTask, {once: true});
+    this.popupForm.addEventListener(
+      "submit",
+      () => {
+        this.editTask(event, e.target.parentNode);
+      },
+      {once: true}
+    );
   };
 
   createTaskContainer(taskName, dueDate, priority, whichProject) {
@@ -120,9 +126,25 @@ export default class Task {
     this.renderTasksRemaininig();
   };
 
-  editTask = (e) => {
+  editTask = (e, task) => {
     e.preventDefault();
     if (this.popupNameActionText.textContent == "New Task") return;
+
+    console.log(task);
+
+    const taskName = task.querySelector(".task-name");
+    const dueDate = task.querySelector(".task-date");
+    const priority = task.querySelector(".task-checkbox");
+
+    const editedTaskName = document.getElementById("task-name").value;
+    const editedDueDate = document.getElementById("date").value;
+    const editedPriority = document.getElementById("priority").value;
+
+    taskName.textContent = editedTaskName;
+    dueDate.textContent = editedDueDate;
+    priority.classList.remove("low", "medium", "high");
+    priority.classList.add(editedPriority);
+
     this.togglePopupForm();
   };
 
@@ -216,6 +238,7 @@ export default class Task {
 
     this.tasks.splice(taskDeleteIndex, 1);
     e.target.parentNode.remove();
+    this.renderTasksRemaininig();
   };
 
   renderTasksRemaininig = () => {
