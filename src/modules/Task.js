@@ -17,36 +17,32 @@ export default class Task {
     this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
     this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
+
     this.taskToDo = document.querySelector(".task-to-do");
     this.popupForm = document.querySelector(".popup-task-form");
     this.projectTaskQuantity = document.querySelector(".project-task-quantity");
 
     this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
     this.buttonTaskClear.addEventListener("click", this.clearCompletedTask);
-    this.popupTaskActionCancel.addEventListener("click", this.removeFormListeners);
+    this.popupTaskActionCancel.addEventListener("click", this.togglePopupForm);
 
     this.renderTasks();
   }
 
-  togglePopupForm() {
+  togglePopupForm = () => {
     this.popupTaskAction.classList.toggle("hide");
-  }
-
-  removeFormListeners = () => {
-    this.popupForm.removeEventListener("submit", this.createNewTask);
-    this.togglePopupForm();
-  };
-
-  toggleEditTask = () => {
-    this.togglePopupForm();
-    this.popupNameActionText.textContent = "Edit Task";
   };
 
   toggleAddTask = () => {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "New Task";
+    this.popupForm.addEventListener("submit", this.createNewTask, {once: true});
+  };
 
-    this.popupForm.addEventListener("submit", this.createNewTask);
+  toggleEditTask = () => {
+    this.togglePopupForm();
+    this.popupNameActionText.textContent = "Edit Task";
+    this.popupForm.addEventListener("submit", this.editTask, {once: true});
   };
 
   createTaskContainer(taskName, dueDate, priority, whichProject) {
@@ -74,7 +70,7 @@ export default class Task {
 
     const editBtn = document.createElement("button");
     editBtn.classList.add("button-edit");
-    editBtn.addEventListener("click", this.editTask);
+    editBtn.addEventListener("click", this.toggleEditTask);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("button-delete");
@@ -99,12 +95,12 @@ export default class Task {
     };
 
     this.tasks.push(task);
-    console.log(this.tasks);
   }
 
   createNewTask = (e) => {
     e.preventDefault();
-    this.popupForm.removeEventListener("submit", this.createNewTask);
+
+    if (this.popupNameActionText.textContent == "Edit Task") return;
 
     let isAlreadyExist = false;
 
@@ -122,6 +118,12 @@ export default class Task {
     this.createTaskContainer(taskName, dueDate, priority);
     this.togglePopupForm();
     this.renderTasksRemaininig();
+  };
+
+  editTask = (e) => {
+    e.preventDefault();
+    if (this.popupNameActionText.textContent == "New Task") return;
+    this.togglePopupForm();
   };
 
   renderAllTasks() {
@@ -216,18 +218,6 @@ export default class Task {
     e.target.parentNode.remove();
   };
 
-  editTask = (e) => {
-    this.toggleEditTask();
-
-    const taskName = e.target.parentNode.querySelector(".task-name");
-    const dueDate = e.target.parentNode.querySelector(".task-date");
-    const priority = e.target.parentNode.querySelector(".task-checkbox");
-
-    this.popupForm.addEventListener("submit", this.changeTaskProperty, {
-      once: true,
-    });
-  };
-
   renderTasksRemaininig = () => {
     const numberOfTasks = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:not(:checked)`).length;
     this.projectTaskQuantity.textContent = numberOfTasks;
@@ -256,8 +246,8 @@ export default class Task {
 // dueDate.textContent = editedDueDate;
 // priority.classList.add(editedPriority);
 
-{
-  /* <div class="task">
+// {
+/* <div class="task">
 <input
   class="task-checkbox medium"
   type="checkbox"
@@ -270,4 +260,4 @@ export default class Task {
 <button class="button-edit"></button>
 <button class="button-delete"></button>
 </div> */
-}
+// }
