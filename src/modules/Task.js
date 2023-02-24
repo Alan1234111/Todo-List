@@ -16,19 +16,14 @@ export default class Task {
 
     this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
-    this.popupTaskActionCancel = document.querySelector(
-      ".popup-task-event-cancel"
-    );
+    this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
     this.taskToDo = document.querySelector(".task-to-do");
     this.popupForm = document.querySelector(".popup-task-form");
     this.projectTaskQuantity = document.querySelector(".project-task-quantity");
 
     this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
     this.buttonTaskClear.addEventListener("click", this.clearCompletedTask);
-    this.popupTaskActionCancel.addEventListener(
-      "click",
-      this.removeFormListeners
-    );
+    this.popupTaskActionCancel.addEventListener("click", this.removeFormListeners);
 
     this.renderTasks();
   }
@@ -71,9 +66,7 @@ export default class Task {
 
     const name = document.createElement("p");
     name.classList.add("task-name");
-    whichProject
-      ? (name.textContent = `${taskName} (${whichProject})`)
-      : (name.textContent = `${taskName}`);
+    whichProject ? (name.textContent = `${taskName} (${whichProject})`) : (name.textContent = `${taskName}`);
 
     const date = document.createElement("p");
     date.classList.add("task-date");
@@ -120,8 +113,7 @@ export default class Task {
     const priority = document.getElementById("priority").value;
 
     this.tasks.forEach((task) => {
-      if (task.name == taskName && task.projectName == this.activeProject)
-        isAlreadyExist = true;
+      if (task.name == taskName && task.projectName == this.activeProject) isAlreadyExist = true;
     });
 
     if (isAlreadyExist) return;
@@ -139,16 +131,7 @@ export default class Task {
       allTasks.push(task);
     });
 
-    console.log(allTasks);
-
-    allTasks.forEach((task) =>
-      this.createTaskContainer(
-        task.name,
-        task.dueDate,
-        task.priority,
-        task.projectName
-      )
-    );
+    allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority, task.projectName));
   }
 
   renderAllTodaysTasks() {
@@ -159,9 +142,7 @@ export default class Task {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    month >= 10
-      ? (month = date.getMonth() + 1)
-      : (month = `0${date.getMonth() + 1}`);
+    month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
     day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
 
     let fullDate = `${year}-${month}-${day}`;
@@ -172,14 +153,7 @@ export default class Task {
       }
     });
 
-    todayTasks.forEach((todayTask) =>
-      this.createTaskContainer(
-        todayTask.name,
-        todayTask.dueDate,
-        todayTask.priority,
-        todayTask.projectName
-      )
-    );
+    todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority, todayTask.projectName));
   }
 
   renderAllWeeksTasks() {
@@ -218,38 +192,25 @@ export default class Task {
   renderTasks() {
     this.taskToDo.innerHTML = "";
 
-    if (this.activeProject.toLocaleLowerCase() == "inbox")
-      return this.renderAllTasks();
-    if (this.activeProject.toLocaleLowerCase() == "today")
-      return this.renderAllTodaysTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox") return this.renderAllTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today") return this.renderAllTodaysTasks();
     // if (this.activeProject.toLocaleLowerCase() == "this week") return this.renderAllWeeksTasks();
 
     let activeProjectTask = [];
 
     this.tasks.forEach((task) => {
-      if (task.projectName == this.activeProject) {
+      if (task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
         activeProjectTask.push(task);
       }
     });
 
-    console.log(activeProjectTask);
-
-    activeProjectTask.forEach((activeTask) =>
-      this.createTaskContainer(
-        activeTask.name,
-        activeTask.dueDate,
-        activeTask.priority
-      )
-    );
+    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority));
     this.renderTasksRemaininig();
   }
 
   deleteTask = (e) => {
-    const taskName =
-      e.target.parentNode.querySelector(".task-name").textContent;
-    const taskDeleteIndex = this.tasks.findIndex(
-      (task) => task.name == taskName
-    );
+    const taskName = e.target.parentNode.querySelector(".task-name").textContent;
+    const taskDeleteIndex = this.tasks.findIndex((task) => task.name == taskName);
 
     this.tasks.splice(taskDeleteIndex, 1);
     e.target.parentNode.remove();
@@ -268,27 +229,19 @@ export default class Task {
   };
 
   renderTasksRemaininig = () => {
-    const numberOfTasks = this.taskToDo.querySelectorAll(
-      `.task input[name="checkbox-task"]:not(:checked)`
-    ).length;
+    const numberOfTasks = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:not(:checked)`).length;
     this.projectTaskQuantity.textContent = numberOfTasks;
   };
 
   clearCompletedTask = () => {
     let completeTasks = [];
 
-    const completedTasksCheckboxes = this.taskToDo.querySelectorAll(
-      `.task input[name="checkbox-task"]:checked`
-    );
-    completedTasksCheckboxes.forEach((completeTaskcheckbox) =>
-      completeTasks.push(completeTaskcheckbox.closest(".task"))
-    );
+    const completedTasksCheckboxes = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:checked`);
+    completedTasksCheckboxes.forEach((completeTaskcheckbox) => completeTasks.push(completeTaskcheckbox.closest(".task")));
 
     completeTasks.forEach((completeTask) => {
       const taskName = completeTask.querySelector(".task-name").textContent;
-      const taskDeleteIndex = this.tasks.findIndex(
-        (task) => task.name == taskName
-      );
+      const taskDeleteIndex = this.tasks.findIndex((task) => task.name == taskName);
       this.tasks.splice(taskDeleteIndex, 1);
       completeTask.remove();
     });
