@@ -1,6 +1,7 @@
 import Task from "./Task";
 
 export default class Projects {
+  projectList = ["Create To Do App"];
   constructor() {
     this.task = new Task();
     this.btnAddProject = document.querySelector(".button-project-add");
@@ -11,8 +12,9 @@ export default class Projects {
     this.projectSectionCancelBtn = document.querySelector(
       ".popup-button-cancel"
     );
-    this.projectName = document.querySelector(".project-name");
+    this.projectDeleteBtn = document.querySelector(".btn-delete-project");
 
+    this.projectName = document.querySelector(".project-name");
     this.userProjectsList = document.querySelector(".projects-list");
     this.btnsDeafultsProjects = document.querySelectorAll(
       ".button-deafult-project"
@@ -32,6 +34,7 @@ export default class Projects {
     this.btnsUserProjects.forEach((btn) =>
       btn.addEventListener("click", this.changeProject)
     );
+    this.projectDeleteBtn.addEventListener("click", this.deleteProject);
   }
 
   createProjectBtn(projectName) {
@@ -76,8 +79,20 @@ export default class Projects {
     if (!projectName || this.isProjectAlreadyExist(projectName)) return;
 
     this.userProjectsList.appendChild(this.createProjectBtn(projectName));
+    this.projectList.push(projectName);
 
     this.toggleInputProjectAdd();
+  };
+
+  deleteProject = () => {
+    const activeProject = document.querySelector(".button-project.active");
+    activeProject.remove();
+    const projectDeleteIndex = this.projectList.findIndex(
+      (project) => project == activeProject.textContent
+    );
+
+    this.projectList.splice(projectDeleteIndex, 1);
+    console.log(this.projectList);
   };
 
   changeProject = (e) => {
@@ -90,6 +105,11 @@ export default class Projects {
     this.task.activeProject = e.target.textContent;
     this.task.renderTasks();
   };
+
+  // renderProjects() {
+  // this.userProjectsList.innerHTML = "";
+  // this.projectList.forEach((project) => this.createProjectBtn(project));
+  // }
 
   toggleInputProjectAdd = () => {
     this.projectAddSection.classList.toggle("hide");
