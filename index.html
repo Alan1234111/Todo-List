@@ -7,10 +7,7 @@
     <link rel="icon" href="img/icon.png" type="image/icon type" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <title>Todo-list</title>
   </head>
@@ -19,40 +16,25 @@
       <input type="checkbox" class="toggle-menu" />
       <div class="hamburger"></div>
 
-      <h1 class="header-name">
-        <img src="img/icon.png" aria-label="none" />Todo List
-      </h1>
+      <h1 class="header-name"><img src="img/icon.png" aria-label="none" />Todo List</h1>
     </header>
 
     <main>
       <div class="sidebar" id="sidebar">
         <div class="deafult-project-list">
-          <button class="button-deafult-project active">
-            <img src="img/inbox.svg" aria-label="none" />Inbox
-          </button>
-          <button class="button-deafult-project">
-            <img src="img/today.svg" aria-label="none" />Today
-          </button>
-          <button class="button-deafult-project">
-            <img src="img/week.svg" aria-label="none" />This week
-          </button>
+          <button class="button-deafult-project active"><img src="img/inbox.svg" aria-label="none" />Inbox</button>
+          <button class="button-deafult-project"><img src="img/today.svg" aria-label="none" />Today</button>
+          <button class="button-deafult-project"><img src="img/week.svg" aria-label="none" />This week</button>
         </div>
 
         <div class="projects-list">
           <p class="projects-list-information">Projects</p>
         </div>
 
-        <button class="button-project-add">
-          <img src="img/add.svg" aria-label="none" /> Add Project
-        </button>
+        <button class="button-project-add"><img src="img/add.svg" aria-label="none" /> Add Project</button>
 
         <div class="popup-project-add hide">
-          <input
-            class="popup-project-input"
-            type="text"
-            name="project"
-            id="project"
-          />
+          <input class="popup-project-input" type="text" name="project" id="project" />
           <button class="popup-button-add">Add</button>
           <button class="popup-button-cancel">Cancel</button>
         </div>
@@ -117,16 +99,14 @@
           <button class="button-task-add">
             <img src="img/add.svg" aria-label="none" />
           </button>
-          <button class="button-task-clear">
-            Clear completed tasks <img src="img/add.svg" aria-label="none" />
-          </button>
+          <button class="button-task-clear">Clear completed tasks <img src="img/add.svg" aria-label="none" /></button>
         </div>
       </div>
     </main>
 
     <div class="popup-task-action hide">
       <div class="popup-name-action">
-        <p>New Task</p>
+        <p class="popup-action">New Task</p>
         <button class="popup-task-event-cancel">
           <img src="img/add.svg" aria-label="none" />
         </button>
@@ -135,14 +115,7 @@
       <form action="#" class="popup-task-form" id="popup-task-form">
         <div class="popup-input-container">
           <label for="task-name">Task name:</label>
-          <input
-            class="popup-input"
-            type="text"
-            id="task-name"
-            name="task-name"
-            placeholder="Task name"
-            required
-          />
+          <input class="popup-input" type="text" id="task-name" name="task-name" placeholder="Task name" required />
         </div>
 
         <div class="popup-input-container">
