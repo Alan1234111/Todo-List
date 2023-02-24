@@ -8,19 +8,30 @@ export default class Projects {
     this.projectAddSection = document.querySelector(".popup-project-add");
     this.projectSectionInput = document.querySelector(".popup-project-input");
     this.projectSectionAddBtn = document.querySelector(".popup-button-add");
-    this.projectSectionCancelBtn = document.querySelector(".popup-button-cancel");
+    this.projectSectionCancelBtn = document.querySelector(
+      ".popup-button-cancel"
+    );
     this.projectName = document.querySelector(".project-name");
 
     this.userProjectsList = document.querySelector(".projects-list");
-    this.btnsDeafultsProjects = document.querySelectorAll(".button-deafult-project");
+    this.btnsDeafultsProjects = document.querySelectorAll(
+      ".button-deafult-project"
+    );
     this.btnsUserProjects = document.querySelectorAll(".button-project");
 
     this.btnAddProject.addEventListener("click", this.toggleInputProjectAdd);
     this.projectSectionAddBtn.addEventListener("click", this.addProject);
-    this.projectSectionCancelBtn.addEventListener("click", this.toggleInputProjectAdd);
+    this.projectSectionCancelBtn.addEventListener(
+      "click",
+      this.toggleInputProjectAdd
+    );
 
-    this.btnsDeafultsProjects.forEach((btn) => btn.addEventListener("click", this.changeProject));
-    this.btnsUserProjects.forEach((btn) => btn.addEventListener("click", this.changeProject));
+    this.btnsDeafultsProjects.forEach((btn) =>
+      btn.addEventListener("click", this.changeProject)
+    );
+    this.btnsUserProjects.forEach((btn) =>
+      btn.addEventListener("click", this.changeProject)
+    );
   }
 
   createProjectBtn(projectName) {
@@ -33,10 +44,36 @@ export default class Projects {
     return project;
   }
 
+  isProjectAlreadyExist(projectName) {
+    let isAlreadyExist = false;
+
+    const btnsUserProjects = document.querySelectorAll(".button-project");
+
+    this.btnsDeafultsProjects.forEach((btnProject) => {
+      if (
+        btnProject.textContent.toLowerCase().replace(/\s+/g, "") ==
+        projectName.toLowerCase().replace(/\s+/g, "")
+      ) {
+        isAlreadyExist = true;
+      }
+    });
+
+    btnsUserProjects.forEach((btnProject) => {
+      if (
+        btnProject.textContent.toLowerCase().replace(/\s+/g, "") ==
+        projectName.toLowerCase().replace(/\s+/g, "")
+      ) {
+        isAlreadyExist = true;
+      }
+    });
+
+    return isAlreadyExist;
+  }
+
   addProject = () => {
     const projectName = this.projectSectionInput.value;
 
-    if (!projectName) return;
+    if (!projectName || this.isProjectAlreadyExist(projectName)) return;
 
     this.userProjectsList.appendChild(this.createProjectBtn(projectName));
 
