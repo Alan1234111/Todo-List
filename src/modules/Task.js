@@ -1,7 +1,14 @@
 export default class Task {
-  tasks = [];
+  tasks = [
+    {
+      projectName: "Create To Do App",
+      name: "Create Html",
+      dueDate: "2023-02-07",
+      priority: "low",
+    },
+  ];
   popupAction = "New Task";
-  activeProject = "Create To Do App";
+  activeProject = "inbox";
 
   constructor() {
     this.buttonTaskAdd = document.querySelector(".button-task-add");
@@ -22,6 +29,8 @@ export default class Task {
       "click",
       this.removeFormListeners
     );
+
+    this.renderTasks();
   }
 
   togglePopupForm() {
@@ -97,6 +106,7 @@ export default class Task {
     };
 
     this.tasks.push(task);
+    console.log(this.tasks);
   }
 
   createNewTask = (e) => {
@@ -128,6 +138,8 @@ export default class Task {
     this.tasks.forEach((task) => {
       allTasks.push(task);
     });
+
+    console.log(allTasks);
 
     allTasks.forEach((task) =>
       this.createTaskContainer(
@@ -220,6 +232,8 @@ export default class Task {
       }
     });
 
+    console.log(activeProjectTask);
+
     activeProjectTask.forEach((activeTask) =>
       this.createTaskContainer(
         activeTask.name,
@@ -288,3 +302,19 @@ export default class Task {
 // taskName.textContent = editedTaskName;
 // dueDate.textContent = editedDueDate;
 // priority.classList.add(editedPriority);
+
+{
+  /* <div class="task">
+<input
+  class="task-checkbox medium"
+  type="checkbox"
+  name="checkbox-task"
+  id="two"
+/>
+<label for="two"></label>
+<p class="task-name">Create CSS</p>
+<p class="task-date">12/07/2023</p>
+<button class="button-edit"></button>
+<button class="button-delete"></button>
+</div> */
+}
