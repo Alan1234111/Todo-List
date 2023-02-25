@@ -2,7 +2,7 @@ export default class Task {
   tasks = [
     {
       projectName: "Create To Do App",
-      name: "Create Html",
+      name: "Create CSS",
       dueDate: "2023-02-07",
       priority: "low",
     },
@@ -42,10 +42,24 @@ export default class Task {
   toggleEditTask = (e) => {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "Edit Task";
+
+    const formTaskName = document.getElementById("task-name");
+    const formDueDate = document.getElementById("date");
+    const formPriority = document.getElementById("priority");
+
+    const task = e.target.parentNode;
+    const taskName = task.querySelector(".task-name");
+    const dueDate = task.querySelector(".task-date");
+    const priority = task.querySelector(".task-checkbox");
+
+    formTaskName.value = taskName.textContent.replace(/\(([^)]+)\)/, "");
+    formDueDate.value = dueDate.textContent;
+    formPriority.value = priority.classList[1];
+
     this.popupForm.addEventListener(
       "submit",
       () => {
-        this.editTask(event, e.target.parentNode);
+        this.editTask(event, task);
       },
       {once: true}
     );
@@ -130,21 +144,33 @@ export default class Task {
     e.preventDefault();
     if (this.popupNameActionText.textContent == "New Task") return;
 
-    console.log(task);
-
     const taskName = task.querySelector(".task-name");
-    const dueDate = task.querySelector(".task-date");
-    const priority = task.querySelector(".task-checkbox");
-
     const editedTaskName = document.getElementById("task-name").value;
     const editedDueDate = document.getElementById("date").value;
     const editedPriority = document.getElementById("priority").value;
 
-    taskName.textContent = editedTaskName;
-    dueDate.textContent = editedDueDate;
-    priority.classList.remove("low", "medium", "high");
-    priority.classList.add(editedPriority);
+    const taskNameToChange = taskName.textContent
+      .replace(/\(([^)]+)\)/, "")
+      .toLowerCase()
+      .replace(/\s+/g, "");
 
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "today" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") {
+      this.tasks.forEach((task) => {
+        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange) {
+          task.name = editedTaskName;
+        }
+      });
+    } else {
+      this.tasks.forEach((task) => {
+        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange || task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+          task.name = editedTaskName;
+          task.dueDate = editedDueDate;
+          task.priority = editedPriority;
+        }
+      });
+    }
+
+    this.renderTasks();
     this.togglePopupForm();
   };
 
