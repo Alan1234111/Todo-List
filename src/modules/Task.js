@@ -1,3 +1,4 @@
+import Ui from "./UI";
 export default class Task {
   tasks = [
     {
@@ -10,6 +11,9 @@ export default class Task {
   activeProject = "inbox";
 
   constructor() {
+    this.ui = new Ui();
+    this.projectName = document.querySelector(".project-name");
+    this.projectTaskQuantity = document.querySelector(".project-task-quantity");
     this.buttonTaskAdd = document.querySelector(".button-task-add");
     this.buttonTaskClear = document.querySelector(".button-task-clear");
 
@@ -19,7 +23,6 @@ export default class Task {
 
     this.taskToDo = document.querySelector(".task-to-do");
     this.popupForm = document.querySelector(".popup-task-form");
-    this.projectTaskQuantity = document.querySelector(".project-task-quantity");
 
     this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
     this.buttonTaskClear.addEventListener("click", this.clearCompletedTask);
@@ -31,11 +34,21 @@ export default class Task {
 
   togglePopupForm = () => {
     this.popupTaskAction.classList.toggle("hide");
+    this.ui.screenDimming();
   };
 
   toggleAddTask = () => {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "New Task";
+
+    const formTaskName = document.getElementById("task-name");
+    const formDueDate = document.getElementById("date");
+    const formPriority = document.getElementById("priority");
+
+    formTaskName.value = "";
+    formDueDate.value = "";
+    formPriority.value = "low";
+
     this.popupForm.addEventListener("submit", this.createNewTask, {once: true});
   };
 
@@ -43,11 +56,11 @@ export default class Task {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "Edit Task";
 
+    const task = e.target.parentNode;
     const formTaskName = document.getElementById("task-name");
     const formDueDate = document.getElementById("date");
     const formPriority = document.getElementById("priority");
 
-    const task = e.target.parentNode;
     const taskName = task.querySelector(".task-name");
     const dueDate = task.querySelector(".task-date");
     const priority = task.querySelector(".task-checkbox");
@@ -75,10 +88,10 @@ export default class Task {
     checkbox.classList.add(`${priority}`);
     checkbox.type = "checkbox";
     checkbox.name = "checkbox-task";
-    checkbox.id = taskName;
+    checkbox.id = taskName.toLowerCase().replace(/\s+/g, "");
 
     const label = document.createElement("label");
-    label.htmlFor = taskName;
+    label.htmlFor = taskName.toLowerCase().replace(/\s+/g, "");
 
     const name = document.createElement("p");
     name.classList.add("task-name");
@@ -96,10 +109,10 @@ export default class Task {
     deleteBtn.classList.add("button-delete");
     deleteBtn.addEventListener("click", this.deleteTask);
 
+    label.appendChild(name);
+    label.appendChild(date);
     task.appendChild(checkbox);
     task.appendChild(label);
-    task.appendChild(name);
-    task.appendChild(date);
     task.appendChild(editBtn);
     task.appendChild(deleteBtn);
 
@@ -135,7 +148,7 @@ export default class Task {
     if (isAlreadyExist) return;
 
     this.addTaskToArray(this.activeProject, taskName, dueDate, priority);
-    this.createTaskContainer(taskName, dueDate, priority);
+    this.renderTasks();
     this.togglePopupForm();
     this.renderTasksRemaininig();
   };
@@ -158,6 +171,8 @@ export default class Task {
       this.tasks.forEach((task) => {
         if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange) {
           task.name = editedTaskName;
+          task.dueDate = editedDueDate;
+          task.priority = editedPriority;
         }
       });
     } else {
@@ -182,6 +197,7 @@ export default class Task {
     });
 
     allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority, task.projectName));
+    this.renderTasksRemaininig();
   }
 
   renderAllTodaysTasks() {
@@ -204,43 +220,14 @@ export default class Task {
     });
 
     todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority, todayTask.projectName));
+    this.renderTasksRemaininig();
   }
 
-  renderAllWeeksTasks() {
-    // let thisWeeksTasks = [];
-    // const date = new Date();
-    // let day = date.getDate() + 10;
-    // let month = date.getMonth() + 1;
-    // let year = date.getFullYear();
-    // function getWeekNumber(d) {
-    //   // Copy date so don't modify original
-    //   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    //   // Set to nearest Thursday: current date + 4 - current day number
-    //   // Make Sunday's day number 7
-    //   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    //   // Get first day of year
-    //   var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    //   // Calculate full weeks to nearest Thursday
-    //   var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    //   // Return array of year and week number
-    //   return [d.getUTCFullYear(), weekNo];
-    // }
-    // var result = getWeekNumber(new Date());
-    // console.log(result);
-    // month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
-    // // day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
-    // let fullDate = `${year}-${month}-${day}`;
-    // console.log(fullDate);
-    // this.tasks.forEach((task) => {
-    //   if (task.dueDate == fullDate) {
-    //     thisWeeksTasks.push(task);
-    //   }
-    // });
-    // thisWeeksTasks.forEach((thisWeeksTask) => this.createTaskContainer(thisWeeksTask.name, thisWeeksTask.dueDate, thisWeeksTask.priority));
-  }
+  renderAllWeeksTasks() {}
 
   renderTasks() {
     this.taskToDo.innerHTML = "";
+    this.projectName.textContent = this.activeProject;
 
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox") return this.renderAllTasks();
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today") return this.renderAllTodaysTasks();
@@ -256,6 +243,18 @@ export default class Task {
 
     activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority));
     this.renderTasksRemaininig();
+  }
+
+  removeAllTaskFromProject(removeProject) {
+    this.tasks.forEach((removeTask) => {
+      if (removeTask.projectName.toLowerCase().replace(/\s+/g, "") == removeProject.toLowerCase().replace(/\s+/g, "")) {
+        const deleteTasksIndex = this.tasks.findIndex((taskIndex) => taskIndex.projectName.toLowerCase().replace(/\s+/g, "") == removeProject.toLowerCase().replace(/\s+/g, ""));
+        this.tasks.splice(deleteTasksIndex, 1);
+      }
+    });
+
+    this.activeProject = "inbox";
+    this.renderTasks();
   }
 
   deleteTask = (e) => {
@@ -286,27 +285,3 @@ export default class Task {
     });
   };
 }
-
-// const editedTaskName = document.getElementById("task-name").value;
-// const editedDueDate = document.getElementById("date").value;
-// const editedPriority = document.getElementById("priority").value;
-
-// taskName.textContent = editedTaskName;
-// dueDate.textContent = editedDueDate;
-// priority.classList.add(editedPriority);
-
-// {
-/* <div class="task">
-<input
-  class="task-checkbox medium"
-  type="checkbox"
-  name="checkbox-task"
-  id="two"
-/>
-<label for="two"></label>
-<p class="task-name">Create CSS</p>
-<p class="task-date">12/07/2023</p>
-<button class="button-edit"></button>
-<button class="button-delete"></button>
-</div> */
-// }
