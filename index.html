@@ -54,20 +54,6 @@
         <div class="task-to-do">
           <!-- <div class="task">
             <input
-              class="task-checkbox low"
-              type="checkbox"
-              name="checkbox-task"
-              id="one"
-            />
-            <label for="one"></label>
-            <p class="task-name">Create Html</p>
-            <p class="task-date">12/07/2023</p>
-            <button class="button-edit"></button>
-            <button class="button-delete"></button>
-          </div>
-
-          <div class="task">
-            <input
               class="task-checkbox medium"
               type="checkbox"
               name="checkbox-task"
@@ -112,7 +98,7 @@
         </button>
       </div>
 
-      <form action="#" class="popup-task-form" id="popup-task-form">
+      <form method="GET" class="popup-task-form" id="popup-task-form" onsubmit="return false">
         <div class="popup-input-container">
           <label for="task-name">Task name:</label>
           <input class="popup-input" type="text" id="task-name" name="task-name" placeholder="Task name" required />
@@ -135,6 +121,8 @@
         <button class="popup-button-submit" type="submit">Submit</button>
       </form>
     </div>
+
+    <div class="popup-screen show"></div>
 
     <script src="main.js"></script>
   </body>
