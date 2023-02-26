@@ -9,6 +9,22 @@
 body {
   background-color: #003459;
   font-family: "Poppins", sans-serif;
+  user-select: none;
+}
+
+.popup-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  background-color: black;
+  z-index: 2;
+}
+
+.show {
+  display: none;
 }
 
 /* header */
@@ -140,6 +156,8 @@ main {
   border: none;
   background-color: transparent;
   font-weight: 700;
+  transition: 0.1s ease-in;
+  user-select: none;
 }
 
 .button-deafult-project img,
@@ -168,6 +186,14 @@ main {
   width: 85%;
   height: 4rem;
   margin-top: 2rem;
+  transform: scale(1);
+  transition: 0.2s;
+}
+
+.popup-project-add.hide {
+  height: 0px;
+  width: 0px;
+  transform: scale(0);
 }
 
 .popup-project-input,
@@ -202,6 +228,7 @@ main {
   background-color: #007fff;
   color: white;
   transition: 0.2s;
+  min-height: 40px;
 }
 
 /* task */
@@ -237,10 +264,6 @@ main {
   background-color: #cccccc;
 }
 
-.hide {
-  display: none;
-}
-
 .task-to-do {
   display: flex;
   flex-direction: column;
@@ -249,8 +272,8 @@ main {
 
 .task {
   display: grid;
-  grid-template-areas: "checkbox name date edit delete ";
-  grid-template-columns: 1fr 4fr 2fr 1fr 1fr;
+  grid-template-areas: "label . edit delete";
+  grid-template-columns: 8fr 0.4fr 1fr 1fr;
   grid-template-rows: 1fr;
   align-items: center;
   width: 90%;
@@ -262,51 +285,53 @@ main {
   background-color: white;
 }
 
+.task label {
+  grid-area: label;
+  display: grid;
+  grid-template-areas: "checkbox name date";
+  grid-template-columns: 1fr 5fr 3fr;
+  grid-template-rows: 1fr;
+  column-gap: 0.5rem;
+  height: 100%;
+}
+
 .task-checkbox {
-  grid-area: checkbox;
   display: none;
+  width: 100px;
+  grid-area: checkbox;
 }
 
 .task-checkbox + label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: auto 0;
 }
 
 .task-checkbox + label:before {
-  display: inline-block;
+  margin: auto 0;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
 }
 
 .task-checkbox + label:before {
   content: url("img/checkbox-blank.svg");
-  width: 20px;
-  height: 20px;
 }
 
 .task-checkbox:checked + label:before {
   content: url("img/checkbox-marked.svg");
 }
 
-.task-checkbox.low + label::before {
-  filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg) brightness(101%) contrast(88%);
-}
-
-.task-checkbox.medium + label::before {
-  filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg) brightness(87%) contrast(89%);
-}
-
-.task-checkbox.high + label::before {
-  filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg) brightness(91%) contrast(105%);
-}
-
 .task-name {
   grid-area: name;
-  font-size: 0.8rem;
-  user-select: none;
+  word-break: break-all;
 }
 
 .task-date {
   grid-area: date;
+}
+
+.task-name,
+.task-date {
+  margin: auto 0;
   font-size: 0.8rem;
   user-select: none;
 }
@@ -330,6 +355,18 @@ main {
   height: 25px;
   border: none;
   background-color: transparent;
+}
+
+.task-checkbox.low + label::before {
+  filter: invert(58%) sepia(25%) saturate(5048%) hue-rotate(93deg) brightness(101%) contrast(88%);
+}
+
+.task-checkbox.medium + label::before {
+  filter: invert(87%) sepia(95%) saturate(2694%) hue-rotate(357deg) brightness(87%) contrast(89%);
+}
+
+.task-checkbox.high + label::before {
+  filter: invert(21%) sepia(37%) saturate(7137%) hue-rotate(331deg) brightness(91%) contrast(105%);
 }
 
 .task-events {
@@ -388,24 +425,32 @@ main {
 /* popup */
 
 .popup-task-action {
+  display: grid;
+  grid-template-rows: 1fr 10fr;
+  grid-template-areas:
+    "action"
+    "form";
+  grid-template-columns: 1fr;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1);
   background-color: #fff;
   z-index: 1;
-  height: 70%;
+  min-height: 70%;
   width: 90%;
   border-radius: 12px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  z-index: 100;
+  transition: 0.3s;
 }
 
 .popup-name-action {
+  grid-area: action;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 15%;
   font-size: 1.2rem;
   font-weight: 700;
   color: #007fff;
@@ -424,21 +469,23 @@ main {
 }
 
 .popup-task-form {
+  grid-area: form;
   display: flex;
   flex-direction: column;
   width: 90%;
+  min-height: 500px;
   margin: 0 auto;
 }
 
 .popup-input-container {
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .popup-input {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 1.4rem 1rem;
   margin-top: 0.5rem;
   border: none;
   background-color: #eeeeee;
@@ -450,6 +497,10 @@ main {
   color: #003459;
   background-color: #fff;
   border: 1px solid #003459;
+}
+
+.hide {
+  transform: translate(-50%, -50%) scale(0);
 }
 
 @media screen and (orientation: landscape) {
@@ -471,7 +522,11 @@ main {
   }
 
   .task {
-    grid-template-columns: 1fr 12fr 2fr 1fr 1fr;
+    grid-template-columns: 12fr 0.4fr 1fr 1fr;
+  }
+
+  .task label {
+    grid-template-columns: 0.5fr 10fr 1.5fr;
   }
 
   .project-informations {
@@ -544,8 +599,15 @@ main {
   /* popup */
 
   .popup-task-action {
-    height: max(60vh, 550px);
-    width: min(25vw, 400px);
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    min-height: 10vh;
+    height: max(60vh, 600px);
+    width: min(25vw, 300px);
+  }
+
+  .popup-task-form {
+    display: flex;
   }
 
   .popup-name-action {
@@ -564,7 +626,7 @@ main {
   }
 
   .popup-input {
-    padding: 1rem 1rem;
+    padding: 1rem;
   }
 
   .popup-button-submit {
@@ -577,5 +639,13 @@ main {
   .popup-button-submit:hover {
     background-color: #003459;
     color: white;
+  }
+
+  .button-deafult-project:hover,
+  .button-project:hover,
+  .button-project-add:hover,
+  .btn-delete-project:hover {
+    transform: scale(1.01, 1);
+    opacity: 0.6;
   }
 }
