@@ -1,4 +1,6 @@
 import Ui from "./UI";
+import { compareAsc, format } from "date-fns";
+import { da, el } from "date-fns/locale";
 export default class Task {
   tasks = [
     {
@@ -6,6 +8,14 @@ export default class Task {
       name: "Create CSS",
       dueDate: "2023-02-07",
       priority: "low",
+      checked: "true",
+    },
+    {
+      projectName: "Create To Do App",
+      name: "Create HTML",
+      dueDate: "2023-03-01",
+      priority: "low",
+      checked: "true",
     },
   ];
   activeProject = "inbox";
@@ -37,6 +47,10 @@ export default class Task {
     this.ui.screenDimming();
   };
 
+  addListenerToForm(listenerToAdd) {
+    this.popupForm.addEventListener("submit", listenerToAdd, { once: true });
+  }
+
   toggleAddTask = () => {
     this.togglePopupForm();
     this.popupNameActionText.textContent = "New Task";
@@ -49,7 +63,7 @@ export default class Task {
     formDueDate.value = "";
     formPriority.value = "low";
 
-    this.popupForm.addEventListener("submit", this.createNewTask, {once: true});
+    this.addListenerToForm(this.createNewTask);
   };
 
   toggleEditTask = (e) => {
@@ -74,21 +88,22 @@ export default class Task {
       () => {
         this.editTask(event, task);
       },
-      {once: true}
+      { once: true }
     );
   };
 
-  createTaskContainer(taskName, dueDate, priority, whichProject) {
+  createTaskContainer(taskName, dueDate, priority, checked, whichProject) {
     const task = document.createElement("div");
     task.classList.add("task");
 
     const checkbox = document.createElement("input");
-    checkbox.addEventListener("click", this.renderTasksRemaininig);
+    checkbox.addEventListener("change", this.changeChecked);
     checkbox.classList.add("task-checkbox");
     checkbox.classList.add(`${priority}`);
     checkbox.type = "checkbox";
     checkbox.name = "checkbox-task";
     checkbox.id = taskName.toLowerCase().replace(/\s+/g, "");
+    checkbox.checked = checked;
 
     const label = document.createElement("label");
     label.htmlFor = taskName.toLowerCase().replace(/\s+/g, "");
@@ -119,15 +134,28 @@ export default class Task {
     this.taskToDo.append(task);
   }
 
-  addTaskToArray(activeProject, taskName, dueDate, priority) {
+  addTaskToArray(activeProject, taskName, dueDate, priority, checked) {
     const task = {
       projectName: activeProject,
       name: taskName,
       dueDate: dueDate,
       priority: priority,
+      checked: checked,
     };
 
     this.tasks.push(task);
+  }
+
+  isTaskAlreadyExist(taskName) {
+    let isAlreadyExist = false;
+
+    this.tasks.forEach((task) => {
+      if (task.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "") && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+        isAlreadyExist = true;
+      }
+    });
+
+    return isAlreadyExist;
   }
 
   createNewTask = (e) => {
@@ -135,19 +163,13 @@ export default class Task {
 
     if (this.popupNameActionText.textContent == "Edit Task") return;
 
-    let isAlreadyExist = false;
-
     const taskName = document.getElementById("task-name").value;
     const dueDate = document.getElementById("date").value;
     const priority = document.getElementById("priority").value;
 
-    this.tasks.forEach((task) => {
-      if (task.name == taskName && task.projectName == this.activeProject) isAlreadyExist = true;
-    });
+    if (this.isTaskAlreadyExist(taskName)) return this.addListenerToForm(this.createNewTask);
 
-    if (isAlreadyExist) return;
-
-    this.addTaskToArray(this.activeProject, taskName, dueDate, priority);
+    this.addTaskToArray(this.activeProject, taskName, dueDate, priority, false);
     this.renderTasks();
     this.togglePopupForm();
     this.renderTasksRemaininig();
@@ -177,7 +199,7 @@ export default class Task {
       });
     } else {
       this.tasks.forEach((task) => {
-        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange || task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
           task.name = editedTaskName;
           task.dueDate = editedDueDate;
           task.priority = editedPriority;
@@ -196,12 +218,13 @@ export default class Task {
       allTasks.push(task);
     });
 
-    allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority, task.projectName));
+    allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority, task.checked, task.projectName));
     this.renderTasksRemaininig();
   }
 
   renderAllTodaysTasks() {
     let todayTasks = [];
+
     const date = new Date();
 
     let day = date.getDate();
@@ -211,19 +234,61 @@ export default class Task {
     month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
     day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
 
-    let fullDate = `${year}-${month}-${day}`;
+    let todayDate = `${year}-${month}-${day}`;
 
     this.tasks.forEach((task) => {
-      if (task.dueDate == fullDate) {
+      if (task.dueDate == todayDate) {
         todayTasks.push(task);
       }
     });
 
-    todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority, todayTask.projectName));
+    todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority, todayTask.checked, todayTask.projectName));
     this.renderTasksRemaininig();
   }
 
-  renderAllWeeksTasks() {}
+  getLastDay(year, month) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  renderAllWeeksTasks() {
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let thisWeekTasks = [];
+    let thisWeekDatesTasks = [];
+
+    for (let i = 0; i < 7; i++) {
+      if (this.getLastDay(year, month) == day) {
+        day = 1;
+        month += 1;
+      }
+
+      if (Number(month) > 12) {
+        month = 1;
+        year += 1;
+      }
+
+      day >= 10 ? (day = Number(day)) : (day = `0${Number(day)}`);
+      month >= 10 ? (month = Number(month)) : (month = `0${Number(month)}`);
+      let thisWeekDate = `${year}-${month}-${day}`;
+      thisWeekDatesTasks.push(thisWeekDate);
+
+      day = Number(day) + 1;
+    }
+
+    thisWeekDatesTasks.forEach((weekTask) => {
+      this.tasks.forEach((task) => {
+        if (task.dueDate == weekTask) {
+          thisWeekTasks.push(task);
+        }
+      });
+    });
+
+    thisWeekTasks.forEach((thisWeekTask) => this.createTaskContainer(thisWeekTask.name, thisWeekTask.dueDate, thisWeekTask.priority, thisWeekTask.checked, thisWeekTask.projectName));
+    this.renderTasksRemaininig();
+  }
 
   renderTasks() {
     this.taskToDo.innerHTML = "";
@@ -231,7 +296,7 @@ export default class Task {
 
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox") return this.renderAllTasks();
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today") return this.renderAllTodaysTasks();
-    // if (this.activeProject.toLocaleLowerCase() == "this week") return this.renderAllWeeksTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") return this.renderAllWeeksTasks();
 
     let activeProjectTask = [];
 
@@ -241,9 +306,27 @@ export default class Task {
       }
     });
 
-    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority));
+    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority, activeTask.checked));
     this.renderTasksRemaininig();
   }
+
+  changeChecked = (e) => {
+    const taskName = e.target.parentNode.querySelector(".task-name").textContent;
+
+    const taskNameWithoutSpaces = taskName
+      .replace(/\(([^)]+)\)/, "")
+      .toLowerCase()
+      .replace(/\s+/g, "");
+    const activeProjectWithoutSpaces = this.activeProject.toLowerCase().replace(/\s+/g, "");
+
+    this.tasks.forEach((task) => {
+      if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameWithoutSpaces && activeProjectWithoutSpaces == task.projectName.toLowerCase().replace(/\s+/g, "")) {
+        task.checked = !task.checked;
+      }
+    });
+
+    this.renderTasksRemaininig();
+  };
 
   removeAllTaskFromProject(removeProject) {
     this.tasks.forEach((removeTask) => {
