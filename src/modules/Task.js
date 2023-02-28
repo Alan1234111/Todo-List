@@ -211,6 +211,19 @@ export default class Task {
     this.togglePopupForm();
   };
 
+  renderActiveProjectTask() {
+    let activeProjectTask = [];
+
+    this.tasks.forEach((task) => {
+      if (task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+        activeProjectTask.push(task);
+      }
+    });
+
+    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority, activeTask.checked));
+    this.renderTasksRemaininig();
+  }
+
   renderAllTasks() {
     let allTasks = [];
 
@@ -297,17 +310,7 @@ export default class Task {
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox") return this.renderAllTasks();
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today") return this.renderAllTodaysTasks();
     if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") return this.renderAllWeeksTasks();
-
-    let activeProjectTask = [];
-
-    this.tasks.forEach((task) => {
-      if (task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
-        activeProjectTask.push(task);
-      }
-    });
-
-    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority, activeTask.checked));
-    this.renderTasksRemaininig();
+    return this.renderActiveProjectTask();
   }
 
   changeChecked = (e) => {
