@@ -32,7 +32,7 @@ export default class Projects {
     const project = document.createElement("button");
     project.classList.add("button-project");
 
-    project.innerHTML = `<img src="img/task-list.svg" aria-label="none"/> ${projectName}`;
+    project.textContent = `${projectName}`;
     project.addEventListener("click", this.changeProject);
 
     return project;
