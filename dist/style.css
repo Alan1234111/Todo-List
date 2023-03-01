@@ -10,6 +10,7 @@ body {
   background-color: #003459;
   font-family: "Poppins", sans-serif;
   user-select: none;
+  height: 100%;
 }
 
 .popup-screen {
@@ -115,15 +116,17 @@ input:checked ~ .hamburger::after {
 
 main {
   width: 100vw;
+  position: relative;
 }
 
 .sidebar {
   position: absolute;
+  top: 0;
   left: -100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 92vh;
+  min-height: 92vh;
   width: 100vw;
   padding-bottom: 4rem;
   background-color: #fff;
@@ -160,8 +163,36 @@ main {
   user-select: none;
 }
 
-.button-deafult-project img,
-.button-project img,
+.button-deafult-project:before {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.6rem;
+  margin-left: 0.6rem;
+}
+
+.button-deafult-project:nth-child(1):before {
+  content: url("img/inbox.svg");
+}
+
+.button-deafult-project:nth-child(2):before {
+  content: url("img/today.svg");
+}
+
+.button-deafult-project:nth-child(3):before {
+  content: url("img/week.svg");
+}
+
+.button-project::before {
+  content: "";
+  background-image: url("img/task-list.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.6rem;
+  margin-left: 0.6rem;
+}
+
 .button-project-add img {
   width: 20px;
   height: 20px;
