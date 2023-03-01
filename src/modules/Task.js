@@ -1,6 +1,4 @@
 import Ui from "./UI";
-import { compareAsc, format } from "date-fns";
-import { da, el } from "date-fns/locale";
 export default class Task {
   tasks = [
     {
@@ -30,6 +28,7 @@ export default class Task {
     this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
     this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
+    this.popupButtonSubmit = document.querySelector(".popup-button-submit");
 
     this.taskToDo = document.querySelector(".task-to-do");
     this.popupForm = document.querySelector(".popup-task-form");
@@ -37,6 +36,7 @@ export default class Task {
     this.buttonTaskAdd.addEventListener("click", this.toggleAddTask);
     this.buttonTaskClear.addEventListener("click", this.clearCompletedTask);
     this.popupTaskActionCancel.addEventListener("click", this.togglePopupForm);
+    this.popupForm.addEventListener("submit", this.addOrChangeTask);
 
     this.renderTasks();
     this.renderTasksRemaininig();
@@ -46,10 +46,6 @@ export default class Task {
     this.popupTaskAction.classList.toggle("hide");
     this.ui.screenDimming();
   };
-
-  addListenerToForm(listenerToAdd) {
-    this.popupForm.addEventListener("submit", listenerToAdd, { once: true });
-  }
 
   toggleAddTask = () => {
     this.togglePopupForm();
@@ -63,7 +59,7 @@ export default class Task {
     formDueDate.value = "";
     formPriority.value = "low";
 
-    this.addListenerToForm(this.createNewTask);
+    this.popupForm.addEventListener("submit", this.createNewTask, { once: true });
   };
 
   toggleEditTask = (e) => {
@@ -83,6 +79,8 @@ export default class Task {
     formDueDate.value = dueDate.textContent;
     formPriority.value = priority.classList[1];
 
+    this.popupTaskActionCancel.style.display = "none";
+
     this.popupForm.addEventListener(
       "submit",
       () => {
@@ -90,6 +88,66 @@ export default class Task {
       },
       { once: true }
     );
+  };
+
+  isTaskAlreadyExist = (taskName) => {
+    let isAlreadyExist = false;
+
+    this.tasks.forEach((task) => {
+      if (task.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "")) {
+        isAlreadyExist = true;
+      }
+    });
+
+    return isAlreadyExist;
+  };
+
+  editTask = (e, task) => {
+    e.preventDefault();
+    if (this.popupNameActionText.textContent == "New Task") return;
+
+    const taskName = task.querySelector(".task-name").textContent;
+    const editedTaskName = document.getElementById("task-name").value;
+    const editedDueDate = document.getElementById("date").value;
+    const editedPriority = document.getElementById("priority").value;
+
+    let taskNameToChange = taskName
+      .replace(/\(([^)]+)\)/, "")
+      .toLowerCase()
+      .replace(/\s+/g, "");
+
+    if (this.isTaskAlreadyExist(editedTaskName)) {
+      if (editedTaskName.toLowerCase().replace(/\s+/g, "") !== taskNameToChange) {
+        return this.popupForm.addEventListener(
+          "submit",
+          () => {
+            this.editTask(event, task);
+          },
+          { once: true }
+        );
+      }
+    }
+
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "today" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") {
+      this.tasks.forEach((task) => {
+        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange) {
+          task.name = editedTaskName;
+          task.dueDate = editedDueDate;
+          task.priority = editedPriority;
+        }
+      });
+    } else {
+      this.tasks.forEach((task) => {
+        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+          task.name = editedTaskName;
+          task.dueDate = editedDueDate;
+          task.priority = editedPriority;
+        }
+      });
+    }
+
+    this.renderTasks();
+    this.togglePopupForm();
   };
 
   createTaskContainer(taskName, dueDate, priority, checked, whichProject) {
@@ -146,20 +204,9 @@ export default class Task {
     this.tasks.push(task);
   }
 
-  isTaskAlreadyExist(taskName) {
-    let isAlreadyExist = false;
-
-    this.tasks.forEach((task) => {
-      if (task.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "") && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
-        isAlreadyExist = true;
-      }
-    });
-
-    return isAlreadyExist;
-  }
-
   createNewTask = (e) => {
     e.preventDefault();
+    this.popupTaskActionCancel.style.display = "block";
 
     if (this.popupNameActionText.textContent == "Edit Task") return;
 
@@ -167,48 +214,12 @@ export default class Task {
     const dueDate = document.getElementById("date").value;
     const priority = document.getElementById("priority").value;
 
-    if (this.isTaskAlreadyExist(taskName)) return this.addListenerToForm(this.createNewTask);
+    if (this.isTaskAlreadyExist(taskName)) return this.popupForm.addEventListener("submit", this.createNewTask, { once: true });
 
     this.addTaskToArray(this.activeProject, taskName, dueDate, priority, false);
     this.renderTasks();
     this.togglePopupForm();
     this.renderTasksRemaininig();
-  };
-
-  editTask = (e, task) => {
-    e.preventDefault();
-    if (this.popupNameActionText.textContent == "New Task") return;
-
-    const taskName = task.querySelector(".task-name");
-    const editedTaskName = document.getElementById("task-name").value;
-    const editedDueDate = document.getElementById("date").value;
-    const editedPriority = document.getElementById("priority").value;
-
-    const taskNameToChange = taskName.textContent
-      .replace(/\(([^)]+)\)/, "")
-      .toLowerCase()
-      .replace(/\s+/g, "");
-
-    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "today" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") {
-      this.tasks.forEach((task) => {
-        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange) {
-          task.name = editedTaskName;
-          task.dueDate = editedDueDate;
-          task.priority = editedPriority;
-        }
-      });
-    } else {
-      this.tasks.forEach((task) => {
-        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
-          task.name = editedTaskName;
-          task.dueDate = editedDueDate;
-          task.priority = editedPriority;
-        }
-      });
-    }
-
-    this.renderTasks();
-    this.togglePopupForm();
   };
 
   renderActiveProjectTask() {
