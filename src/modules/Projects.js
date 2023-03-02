@@ -23,6 +23,8 @@ export default class Projects {
     this.btnsUserProjects.forEach((btn) => btn.addEventListener("click", this.changeProject));
     this.projectDeleteBtn.addEventListener("click", this.deleteProject);
 
+    // localStorage.setItem("projectList", JSON.stringify(this.projectList));
+    JSON.parse(localStorage.getItem("projectList")) ? (this.projectList = JSON.parse(localStorage.getItem("projectList"))) : (this.projectList = this.projectList);
     this.renderProjects();
     this.task = new Task();
     this.ui = new Ui();
@@ -67,12 +69,29 @@ export default class Projects {
     this.projectList.push(projectName);
 
     this.toggleInputProjectAdd();
+    localStorage.setItem("projectList", JSON.stringify(this.projectList));
   };
 
   deleteProject = () => {
     const activeProject = document.querySelector(".button-project.active");
 
     if (!activeProject) return;
+
+    //Remove Project from Local
+
+    if (JSON.parse(localStorage.getItem("projectList"))) {
+      const projectName = activeProject.textContent;
+      let localStorageProjects = JSON.parse(localStorage.getItem("projectList"));
+
+      localStorageProjects.forEach((storageProject, i) => {
+        if (storageProject.toLowerCase().replace(/\s+/g, "") == projectName.toLowerCase().replace(/\s+/g, "")) {
+          localStorageProjects.splice(i, 1);
+        }
+      });
+
+      localStorageProjects = JSON.stringify(localStorageProjects);
+      localStorage.setItem("projectList", localStorageProjects);
+    }
 
     activeProject.remove();
     const projectDeleteIndex = this.projectList.findIndex((project) => project.toLowerCase().replace(/\s+/g, "") == activeProject.textContent.toLowerCase().replace(/\s+/g, ""));
@@ -88,6 +107,7 @@ export default class Projects {
     e.target.classList.add("active");
 
     this.task.activeProject = e.target.textContent;
+    localStorage.setItem("activeProject", e.target.textContent);
     this.task.renderTasks();
     this.ui.openSidebar();
   };
