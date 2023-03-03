@@ -7,7 +7,10 @@
     <link rel="icon" href="img/icon.png" type="image/icon type" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Todo-list</title>
   </head>
@@ -16,13 +19,15 @@
       <input type="checkbox" class="toggle-menu" />
       <div class="hamburger"></div>
 
-      <h1 class="header-name"><img src="img/icon.png" aria-label="none" />Todo List</h1>
+      <h1 class="header-name">
+        <img src="img/icon.png" aria-label="none" />Todo List
+      </h1>
     </header>
 
     <main>
       <div class="sidebar" id="sidebar">
         <div class="deafult-project-list">
-          <button class="button-deafult-project active">Inbox</button>
+          <button class="button-deafult-project">Inbox</button>
           <button class="button-deafult-project">Today</button>
           <button class="button-deafult-project">This week</button>
         </div>
@@ -31,10 +36,17 @@
           <p class="projects-list-information">Projects</p>
         </div>
 
-        <button class="button-project-add"><img src="img/add.svg" aria-label="none" /> Add Project</button>
+        <button class="button-project-add">
+          <img src="img/add.svg" aria-label="none" /> Add Project
+        </button>
 
         <div class="popup-project-add hide">
-          <input class="popup-project-input" type="text" name="project" id="project" />
+          <input
+            class="popup-project-input"
+            type="text"
+            name="project"
+            id="project"
+          />
           <button class="popup-button-add">Add</button>
           <button class="popup-button-cancel">Cancel</button>
         </div>
@@ -51,41 +63,15 @@
           <p><span class="project-task-quantity">0</span> task remaning</p>
         </div>
 
-        <div class="task-to-do">
-          <!-- <div class="task">
-            <input
-              class="task-checkbox medium"
-              type="checkbox"
-              name="checkbox-task"
-              id="two"
-            />
-            <label for="two"></label>
-            <p class="task-name">Create CSS</p>
-            <p class="task-date">12/07/2023</p>
-            <button class="button-edit"></button>
-            <button class="button-delete"></button>
-          </div>
-
-          <div class="task">
-            <input
-              class="task-checkbox high"
-              type="checkbox"
-              name="checkbox-task"
-              id="three"
-            />
-            <label for="three"></label>
-            <p class="task-name">Create javascript</p>
-            <p class="task-date">12/07/2023</p>
-            <button class="button-edit"></button>
-            <button class="button-delete"></button>
-          </div> -->
-        </div>
+        <div class="task-to-do"></div>
 
         <div class="task-events">
           <button class="button-task-add">
             <img src="img/add.svg" aria-label="none" />
           </button>
-          <button class="button-task-clear">Clear completed tasks <img src="img/add.svg" aria-label="none" /></button>
+          <button class="button-task-clear">
+            Clear completed tasks <img src="img/add.svg" aria-label="none" />
+          </button>
         </div>
       </div>
     </main>
@@ -98,10 +84,22 @@
         </button>
       </div>
 
-      <form method="GET" class="popup-task-form" id="popup-task-form" onsubmit="return false">
+      <form
+        method="GET"
+        class="popup-task-form"
+        id="popup-task-form"
+        onsubmit="return false"
+      >
         <div class="popup-input-container">
           <label for="task-name">Task name:</label>
-          <input class="popup-input" type="text" id="task-name" name="task-name" placeholder="Task name" required />
+          <input
+            class="popup-input"
+            type="text"
+            id="task-name"
+            name="task-name"
+            placeholder="Task name"
+            required
+          />
         </div>
 
         <div class="popup-input-container">
