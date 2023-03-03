@@ -7,14 +7,14 @@ export default class Task {
       name: "Create CSS",
       dueDate: "2023-02-07",
       priority: "low",
-      checked: "true",
+      checked: true,
     },
     {
       projectName: "Create To Do App",
       name: "Create HTML",
       dueDate: "2023-03-01",
       priority: "low",
-      checked: "true",
+      checked: true,
     },
   ];
   activeProject = "inbox";
@@ -28,7 +28,9 @@ export default class Task {
 
     this.popupNameActionText = document.querySelector(".popup-name-action p");
     this.popupTaskAction = document.querySelector(".popup-task-action");
-    this.popupTaskActionCancel = document.querySelector(".popup-task-event-cancel");
+    this.popupTaskActionCancel = document.querySelector(
+      ".popup-task-event-cancel"
+    );
     this.popupButtonSubmit = document.querySelector(".popup-button-submit");
 
     this.taskToDo = document.querySelector(".task-to-do");
@@ -39,9 +41,12 @@ export default class Task {
     this.popupTaskActionCancel.addEventListener("click", this.togglePopupForm);
     this.popupForm.addEventListener("submit", this.addOrChangeTask);
 
-    JSON.parse(localStorage.getItem("tasks")) ? (this.tasks = JSON.parse(localStorage.getItem("tasks"))) : (this.tasks = this.tasks);
-    localStorage.getItem("activeProject") ? (this.activeProject = localStorage.getItem("activeProject")) : (this.activeProject = this.activeProject);
-    // this.tasks = JSON.parse(localStorage.getItem("tasks"));
+    JSON.parse(localStorage.getItem("tasks"))
+      ? (this.tasks = JSON.parse(localStorage.getItem("tasks")))
+      : (this.tasks = this.tasks);
+    localStorage.getItem("activeProject")
+      ? (this.activeProject = localStorage.getItem("activeProject"))
+      : (this.activeProject = this.activeProject);
     this.renderTasks();
     this.renderTasksRemaininig();
   }
@@ -63,7 +68,9 @@ export default class Task {
     formDueDate.value = "";
     formPriority.value = "low";
 
-    this.popupForm.addEventListener("submit", this.createNewTask, { once: true });
+    this.popupForm.addEventListener("submit", this.createNewTask, {
+      once: true,
+    });
   };
 
   toggleEditTask = (e) => {
@@ -98,7 +105,10 @@ export default class Task {
     let isAlreadyExist = false;
 
     this.tasks.forEach((task) => {
-      if (task.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "")) {
+      if (
+        task.name.toLowerCase().replace(/\s+/g, "") ==
+        taskName.toLowerCase().replace(/\s+/g, "")
+      ) {
         isAlreadyExist = true;
       }
     });
@@ -121,7 +131,9 @@ export default class Task {
       .replace(/\s+/g, "");
 
     if (this.isTaskAlreadyExist(editedTaskName)) {
-      if (editedTaskName.toLowerCase().replace(/\s+/g, "") !== taskNameToChange) {
+      if (
+        editedTaskName.toLowerCase().replace(/\s+/g, "") !== taskNameToChange
+      ) {
         return this.popupForm.addEventListener(
           "submit",
           () => {
@@ -132,22 +144,50 @@ export default class Task {
       }
     }
 
-    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "today" || this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") {
+    if (
+      this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox" ||
+      this.activeProject.toLowerCase().replace(/\s+/g, "") == "today" ||
+      this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek"
+    ) {
       this.tasks.forEach((task) => {
         if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange) {
           task.name = editedTaskName;
           task.dueDate = editedDueDate;
           task.priority = editedPriority;
+          return;
         }
       });
     } else {
       this.tasks.forEach((task) => {
-        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange && task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+        if (
+          task.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange &&
+          task.projectName.toLowerCase().replace(/\s+/g, "") ==
+            this.activeProject.toLowerCase().replace(/\s+/g, "")
+        ) {
           task.name = editedTaskName;
           task.dueDate = editedDueDate;
           task.priority = editedPriority;
         }
       });
+    }
+
+    // Local Storage
+
+    if (JSON.parse(localStorage.getItem("tasks"))) {
+      let localStorageTasks = JSON.parse(localStorage.getItem("tasks"));
+
+      localStorageTasks.map((storageTask) => {
+        if (
+          storageTask.name.toLowerCase().replace(/\s+/g, "") == taskNameToChange
+        ) {
+          storageTask.name = editedTaskName;
+          storageTask.dueDate = editedDueDate;
+          task.priority = editedPriority;
+        }
+      });
+
+      localStorageTasks = JSON.stringify(localStorageTasks);
+      localStorage.setItem("tasks", localStorageTasks);
     }
 
     this.renderTasks();
@@ -172,7 +212,9 @@ export default class Task {
 
     const name = document.createElement("p");
     name.classList.add("task-name");
-    whichProject ? (name.textContent = `${taskName} (${whichProject})`) : (name.textContent = `${taskName}`);
+    whichProject
+      ? (name.textContent = `${taskName} (${whichProject})`)
+      : (name.textContent = `${taskName}`);
 
     const date = document.createElement("p");
     date.classList.add("task-date");
@@ -207,9 +249,6 @@ export default class Task {
 
     this.tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(this.tasks));
-
-    // retrieving localStorage data in HTML
-    // document.getElementById("content").innerHTML = localStorage.getItem("myCountryInfo");
   }
 
   createNewTask = (e) => {
@@ -222,7 +261,10 @@ export default class Task {
     const dueDate = document.getElementById("date").value;
     const priority = document.getElementById("priority").value;
 
-    if (this.isTaskAlreadyExist(taskName)) return this.popupForm.addEventListener("submit", this.createNewTask, { once: true });
+    if (this.isTaskAlreadyExist(taskName))
+      return this.popupForm.addEventListener("submit", this.createNewTask, {
+        once: true,
+      });
 
     this.addTaskToArray(this.activeProject, taskName, dueDate, priority, false);
     this.renderTasks();
@@ -234,12 +276,22 @@ export default class Task {
     let activeProjectTask = [];
 
     this.tasks.forEach((task) => {
-      if (task.projectName.toLowerCase().replace(/\s+/g, "") == this.activeProject.toLowerCase().replace(/\s+/g, "")) {
+      if (
+        task.projectName.toLowerCase().replace(/\s+/g, "") ==
+        this.activeProject.toLowerCase().replace(/\s+/g, "")
+      ) {
         activeProjectTask.push(task);
       }
     });
 
-    activeProjectTask.forEach((activeTask) => this.createTaskContainer(activeTask.name, activeTask.dueDate, activeTask.priority, activeTask.checked));
+    activeProjectTask.forEach((activeTask) =>
+      this.createTaskContainer(
+        activeTask.name,
+        activeTask.dueDate,
+        activeTask.priority,
+        activeTask.checked
+      )
+    );
     this.renderTasksRemaininig();
   }
 
@@ -250,7 +302,15 @@ export default class Task {
       allTasks.push(task);
     });
 
-    allTasks.forEach((task) => this.createTaskContainer(task.name, task.dueDate, task.priority, task.checked, task.projectName));
+    allTasks.forEach((task) =>
+      this.createTaskContainer(
+        task.name,
+        task.dueDate,
+        task.priority,
+        task.checked,
+        task.projectName
+      )
+    );
     this.renderTasksRemaininig();
   }
 
@@ -263,7 +323,9 @@ export default class Task {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    month >= 10 ? (month = date.getMonth() + 1) : (month = `0${date.getMonth() + 1}`);
+    month >= 10
+      ? (month = date.getMonth() + 1)
+      : (month = `0${date.getMonth() + 1}`);
     day >= 10 ? (day = date.getDate()) : (day = `0${date.getDate()}`);
 
     let todayDate = `${year}-${month}-${day}`;
@@ -274,7 +336,15 @@ export default class Task {
       }
     });
 
-    todayTasks.forEach((todayTask) => this.createTaskContainer(todayTask.name, todayTask.dueDate, todayTask.priority, todayTask.checked, todayTask.projectName));
+    todayTasks.forEach((todayTask) =>
+      this.createTaskContainer(
+        todayTask.name,
+        todayTask.dueDate,
+        todayTask.priority,
+        todayTask.checked,
+        todayTask.projectName
+      )
+    );
     this.renderTasksRemaininig();
   }
 
@@ -318,7 +388,15 @@ export default class Task {
       });
     });
 
-    thisWeekTasks.forEach((thisWeekTask) => this.createTaskContainer(thisWeekTask.name, thisWeekTask.dueDate, thisWeekTask.priority, thisWeekTask.checked, thisWeekTask.projectName));
+    thisWeekTasks.forEach((thisWeekTask) =>
+      this.createTaskContainer(
+        thisWeekTask.name,
+        thisWeekTask.dueDate,
+        thisWeekTask.priority,
+        thisWeekTask.checked,
+        thisWeekTask.projectName
+      )
+    );
     this.renderTasksRemaininig();
   }
 
@@ -326,23 +404,28 @@ export default class Task {
     this.taskToDo.innerHTML = "";
     this.projectName.textContent = this.activeProject;
 
-    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox") return this.renderAllTasks();
-    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today") return this.renderAllTodaysTasks();
-    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek") return this.renderAllWeeksTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "inbox")
+      return this.renderAllTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "today")
+      return this.renderAllTodaysTasks();
+    if (this.activeProject.toLowerCase().replace(/\s+/g, "") == "thisweek")
+      return this.renderAllWeeksTasks();
     return this.renderActiveProjectTask();
   }
 
   changeChecked = (e) => {
-    const taskName = e.target.parentNode.querySelector(".task-name").textContent;
+    const taskName =
+      e.target.parentNode.querySelector(".task-name").textContent;
 
     const taskNameWithoutSpaces = taskName
       .replace(/\(([^)]+)\)/, "")
       .toLowerCase()
       .replace(/\s+/g, "");
-    const activeProjectWithoutSpaces = this.activeProject.toLowerCase().replace(/\s+/g, "");
 
     this.tasks.forEach((task) => {
-      if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameWithoutSpaces && activeProjectWithoutSpaces == task.projectName.toLowerCase().replace(/\s+/g, "")) {
+      if (
+        task.name.toLowerCase().replace(/\s+/g, "") == taskNameWithoutSpaces
+      ) {
         task.checked = !task.checked;
       }
     });
@@ -353,7 +436,9 @@ export default class Task {
       let localStorageTasks = JSON.parse(localStorage.getItem("tasks"));
 
       localStorageTasks.forEach((task) => {
-        if (task.name.toLowerCase().replace(/\s+/g, "") == taskNameWithoutSpaces && activeProjectWithoutSpaces == task.projectName.toLowerCase().replace(/\s+/g, "")) {
+        if (
+          task.name.toLowerCase().replace(/\s+/g, "") == taskNameWithoutSpaces
+        ) {
           task.checked = !task.checked;
         }
       });
@@ -367,7 +452,10 @@ export default class Task {
 
   removeAllTaskFromProject(removeProject) {
     let arrayWithoutRemoveTasks = this.tasks.filter((task) => {
-      return task.projectName.toLowerCase().replace(/\s+/g, "") !== removeProject.toLowerCase().replace(/\s+/g, "");
+      return (
+        task.projectName.toLowerCase().replace(/\s+/g, "") !==
+        removeProject.toLowerCase().replace(/\s+/g, "")
+      );
     });
 
     this.tasks = arrayWithoutRemoveTasks;
@@ -378,7 +466,10 @@ export default class Task {
       let localStorageProjects = JSON.parse(localStorage.getItem("tasks"));
 
       localStorageProjects = localStorageProjects.filter((task) => {
-        return task.projectName.toLowerCase().replace(/\s+/g, "") !== removeProject.toLowerCase().replace(/\s+/g, "");
+        return (
+          task.projectName.toLowerCase().replace(/\s+/g, "") !==
+          removeProject.toLowerCase().replace(/\s+/g, "")
+        );
       });
 
       localStorageProjects = JSON.stringify(localStorageProjects);
@@ -391,23 +482,33 @@ export default class Task {
   }
 
   deleteTask = (e) => {
-    const taskName = e.target.parentNode.querySelector(".task-name").textContent.replace(/\(([^)]+)\)/, "");
+    const taskName = e.target.parentNode
+      .querySelector(".task-name")
+      .textContent.replace(/\(([^)]+)\)/, "");
     const taskDeleteIndex = this.tasks.findIndex((task) => {
-      return task.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "");
+      return (
+        task.name.toLowerCase().replace(/\s+/g, "") ==
+        taskName.toLowerCase().replace(/\s+/g, "")
+      );
     });
 
     // Remove From LocalStorage
 
-    let localStorageTasks = JSON.parse(localStorage.getItem("tasks"));
+    if (JSON.parse(localStorage.getItem("tasks"))) {
+      let localStorageTasks = JSON.parse(localStorage.getItem("tasks"));
 
-    localStorageTasks.forEach((storageTask, i) => {
-      if (storageTask.name.toLowerCase().replace(/\s+/g, "") == taskName.toLowerCase().replace(/\s+/g, "")) {
-        localStorageTasks.splice(i, 1);
-      }
-    });
+      localStorageTasks.forEach((storageTask, i) => {
+        if (
+          storageTask.name.toLowerCase().replace(/\s+/g, "") ==
+          taskName.toLowerCase().replace(/\s+/g, "")
+        ) {
+          localStorageTasks.splice(i, 1);
+        }
+      });
 
-    localStorageTasks = JSON.stringify(localStorageTasks);
-    localStorage.setItem("tasks", localStorageTasks);
+      localStorageTasks = JSON.stringify(localStorageTasks);
+      localStorage.setItem("tasks", localStorageTasks);
+    }
 
     this.tasks.splice(taskDeleteIndex, 1);
     e.target.parentNode.remove();
@@ -415,34 +516,29 @@ export default class Task {
   };
 
   renderTasksRemaininig = () => {
-    const numberOfTasks = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:not(:checked)`).length;
+    const numberOfTasks = this.taskToDo.querySelectorAll(
+      `.task input[name="checkbox-task"]:not(:checked)`
+    ).length;
     this.projectTaskQuantity.textContent = numberOfTasks;
   };
 
   clearCompletedTask = () => {
-    let completeTasks = [];
-
-    const completedTasksCheckboxes = this.taskToDo.querySelectorAll(`.task input[name="checkbox-task"]:checked`);
-    completedTasksCheckboxes.forEach((completeTaskcheckbox) => completeTasks.push(completeTaskcheckbox.closest(".task")));
-
-    completeTasks.forEach((completeTask) => {
-      const taskName = completeTask.querySelector(".task-name").textContent;
-      const taskDeleteIndex = this.tasks.findIndex((task) => task.name == taskName);
-      this.tasks.splice(taskDeleteIndex, 1);
-      completeTask.remove();
+    let taskWithoutComplete = this.tasks.filter((task) => {
+      return task.checked !== true;
     });
 
-    console.log(completeTasks);
+    this.tasks = taskWithoutComplete;
+    this.renderTasks();
 
-    // if (JSON.parse(localStorage.getItem("tasks"))) {
-    // let localStorageProjects = JSON.parse(localStorage.getItem("tasks"));
+    if (JSON.parse(localStorage.getItem("tasks"))) {
+      let localStorageTasks = JSON.parse(localStorage.getItem("tasks"));
 
-    // localStorageProjects = localStorageProjects.filter((task) => {
-    // return task.projectName.toLowerCase().replace(/\s+/g, "") !== removeProject.toLowerCase().replace(/\s+/g, "");
-    // });
+      let storageTaskWithoutComplete = localStorageTasks.filter((task) => {
+        return task.checked !== true;
+      });
 
-    // localStorageProjects = JSON.stringify(localStorageProjects);
-    // localStorage.setItem("tasks", localStorageProjects);
-    // }
+      localStorageTasks = JSON.stringify(storageTaskWithoutComplete);
+      localStorage.setItem("tasks", localStorageTasks);
+    }
   };
 }
